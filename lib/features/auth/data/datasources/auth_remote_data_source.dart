@@ -1,5 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'dio_base.dart';
+import 'dio_path.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -15,11 +16,22 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final http.Client client;
-
-  AuthRemoteDataSourceImpl({required this.client});
 
   static const String _apiKey = 'bc61215c7bd10ef8c519d48f1f033d0d';
+
+  @override
+  Future<String> getRequestToken() async {
+    try {
+      final response = await dio.get(
+        '$authentication/token/new',
+        queryParameters: {'api_key': _apiKey},
+      );
+      return response.data['request_token'];
+    } catch (e) {
+      print("Failed to get request token: $e");
+      throw Exception('Failed to get request token: $e');
+    }
+  }
 
   @override
   Future<String> validateLogin({
@@ -27,126 +39,69 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required String requestToken,
   }) async {
-    final response = await client.post(
-      Uri.parse('https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=$_apiKey'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'username': username,
-        'password': password,
-        'request_token': requestToken,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return json['request_token'] as String;
-    } else {
-      throw Exception('Failed to validate login');
+    try {
+      final response = await dio.post(
+        '$authentication/token/validate_with_login',
+        queryParameters: {'api_key': _apiKey},
+        data: {
+          'username': username,
+          'password': password,
+          'request_token': requestToken,
+        },
+      );
+      return response.data['request_token'];
+    } catch (e) {
+      print("Failed to validate login: $e");
+      throw Exception('Failed to validate login: $e');
     }
   }
 
   @override
   Future<String> createSession(String validatedToken) async {
-    final response = await client.post(
-      Uri.parse('https://api.themoviedb.org/3/authentication/session/new?api_key=$_apiKey'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'request_token': validatedToken,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return json['session_id'] as String;
-    } else {
-      throw Exception('Failed to create session');
+    try {
+      final response = await dio.post(
+        '$authentication/session/new',
+        queryParameters: {'api_key': _apiKey},
+        data: {'request_token': validatedToken},
+      );
+      return response.data['session_id'];
+    } catch (e) {
+      print("Failed to create session: $e");
+      throw Exception('Failed to create session: $e');
     }
-  }
-
-  @override
-  Future<String> getRequestToken() async {
-    final tokenRes = await client.get(
-      Uri.parse('https://api.themoviedb.org/3/authentication/token/new?api_key=$_apiKey'),
-    );
-    
-    if (tokenRes.statusCode != 200) {
-      throw Exception("Failed to get request token");
-    }
-    
-    final requestToken = jsonDecode(tokenRes.body)['request_token'];
-    return requestToken;
   }
 
   @override
   Future<UserModel> getAccount(String sessionId) async {
-    final response = await client.get(
-      Uri.parse('https://api.themoviedb.org/3/account?api_key=$_apiKey&session_id=$sessionId'),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+    try {
+      final response = await dio.get(
+        '/account',
+        queryParameters: {'api_key': _apiKey, 'session_id': sessionId},
+      );
       return UserModel.fromJson({
-        ...data,
-        'session_id': sessionId, // Include session_id in the user model
+        ...response.data,
+        'session_id': sessionId,
       });
-    } else {
-      throw Exception('Failed to load user account');
+    } catch (e) {
+      print("Failed to load user account: $e");
+      throw Exception('Failed to load user account: $e');
     }
   }
 
   @override
   Future<UserModel> login(String username, String password) async {
     try {
-      // 1. Get request_token
       final requestToken = await getRequestToken();
-
-      // 2. Validate with login
-      final validateRes = await client.post(
-        Uri.parse('https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=$_apiKey'),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "username": username,
-          "password": password,
-          "request_token": requestToken,
-        }),
+      final validatedToken = await validateLogin(
+        username: username,
+        password: password,
+        requestToken: requestToken,
       );
-
-      if (validateRes.statusCode != 200) {
-        throw Exception("Invalid TMDB credentials: ${validateRes.body}");
-      }
-
-      final validatedToken = jsonDecode(validateRes.body)['request_token'];
-
-      // 3. Create session
-      final sessionRes = await client.post(
-        Uri.parse('https://api.themoviedb.org/3/authentication/session/new?api_key=$_apiKey'),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"request_token": validatedToken}),
-      );
-
-      if (sessionRes.statusCode != 200) {
-        throw Exception("Failed to create session: ${sessionRes.body}");
-      }
-      final sessionId = jsonDecode(sessionRes.body)['session_id'];
-
-      // 4. Get user/account info
-      final accountRes = await client.get(
-        Uri.parse('https://api.themoviedb.org/3/account?api_key=$_apiKey&session_id=$sessionId'),
-      );
-
-      if (accountRes.statusCode != 200) {
-        throw Exception("Failed to get account info");
-      }
-
-      final accountJson = jsonDecode(accountRes.body);
-
-      // Optional: Nếu muốn, thêm sessionId vào user model
-      return UserModel.fromJson({
-        ...accountJson,
-        'session_id': sessionId,
-      });
+      final sessionId = await createSession(validatedToken);
+      return await getAccount(sessionId);
     } catch (e) {
-        throw Exception("Login failed: $e");
+      print("Login failed: $e");
+      throw Exception('Login failed: $e');
     }
   }
 }

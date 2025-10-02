@@ -8,12 +8,12 @@ class UserModel extends User {
     String? sessionId,
     String? email,
   }) : super(
-          id: id,
-          username: username,
-          name: name,
-          sessionId: sessionId,
-          email: email,
-        );
+    id: id,
+    username: username,
+    name: name,
+    sessionId: sessionId,
+    email: email,
+  );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

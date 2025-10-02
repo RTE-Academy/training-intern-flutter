@@ -1,5 +1,6 @@
 import 'package:clean_architecture_tdd_course/features/auth/domain/usecases/login_usecase.dart';
 import 'package:clean_architecture_tdd_course/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -41,9 +42,7 @@ Future<void> init() async {
 
   //Bloc_Auth
   sl.registerFactory(
-    () => AuthBloc(
-       sl(),
-    ),
+    () => AuthBloc(sl(),),
   );
 
   //Bloc_Movie
@@ -77,6 +76,13 @@ Future<void> init() async {
     ),
   );
 
+  // AuthRemoteDataSource
+  sl.registerLazySingleton(() => Dio());
+
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+        () => AuthRemoteDataSourceImpl(),
+  );
+
   // Repository_Auth
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
@@ -101,10 +107,6 @@ Future<void> init() async {
     () => NumberTriviaLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
-  // Data sources_Auth
-  sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(client: sl()),
-  );
 
   // Data sources_Movie
   // sl.registerLazySingleton<MovieRemoteDataSource>(

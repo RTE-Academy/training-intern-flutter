@@ -7,7 +7,6 @@ abstract class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// Khi user nhấn nút Login
 class LoginSubmitted extends AuthEvent {
   final String username;
   final String password;

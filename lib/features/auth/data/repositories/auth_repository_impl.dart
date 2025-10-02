@@ -12,9 +12,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, User>> login(String username, String password) async {
     try {
-      final user = await remoteDataSource.login(username, password);
-      return Right(user);
-    } catch (_) {
+      final userModel = await remoteDataSource.login(username, password);
+      return Right(User.fromModel(userModel));
+    } catch (e) {
+      print("Repository login error: $e");
       return Left(ServerFailure());
     }
   }
