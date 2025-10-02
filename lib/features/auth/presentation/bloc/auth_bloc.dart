@@ -1,42 +1,39 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/usecases/login_usecase.dart';
-import '../../domain/entities/user.dart';
-
-abstract class AuthEvent {}
-class LoginEvent extends AuthEvent {
-  final String username;
-  final String password;
-  LoginEvent(this.username, this.password);
-}
-
-abstract class AuthState {}
-class AuthInitial extends AuthState {}
-class AuthLoading extends AuthState {}
-class AuthSuccess extends AuthState {
-  final User user;
-  AuthSuccess(this.user);
-}
-class AuthFailure extends AuthState {
-  final String message;
-  AuthFailure(this.message);
-}
+import 'auth_event.dart';
+import 'auth_state.dart';
+import '../../data/datasources/auth_remote_data_source.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final Login loginUseCase;
+  final AuthRemoteDataSource authDataSource;
 
-  AuthBloc(this.loginUseCase) : super(AuthInitial()) {
-    on<LoginEvent>((event, emit) async {
-      emit(AuthLoading());
-      final result = await loginUseCase(event.username, event.password);
-      result.fold(
-            (failure) => emit(AuthFailure(_mapFailureToMessage(failure))),
-            (user) => emit(AuthSuccess(user)),
-      );
-    });
+  AuthBloc(this.authDataSource) : super(AuthInitial()) {
+    on<LoginSubmitted>(_onLoginSubmitted);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    return "Login failed!";
+  Future<void> _onLoginSubmitted(
+      LoginSubmitted event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+
+    try {
+      // 1. Get request token
+      final requestToken = await authDataSource.getRequestToken();
+
+      // 2. Validate login
+      final validatedToken = await authDataSource.validateLogin(
+        username: event.username,
+        password: event.password,
+        requestToken: requestToken,
+      );
+
+      // 3. Create session
+      final sessionId = await authDataSource.createSession(validatedToken);
+
+      // 4. Get account info
+      final user = await authDataSource.getAccount(sessionId);
+
+      emit(AuthSuccess(user));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
   }
 }

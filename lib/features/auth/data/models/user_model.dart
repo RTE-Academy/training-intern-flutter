@@ -21,7 +21,7 @@ class UserModel extends User {
       username: json['username'],
       name: json['name'],
       sessionId: json['session_id'],
-      email: json['email'], // Tự thêm nếu có
+      email: json['email'],
     );
   }
 }
