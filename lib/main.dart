@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
-import 'features/auth/presentation/pages/login_page.dart';
+
+import 'features/number_trivia/presentation/pages/number_trivia_page.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await di.init(); // Khởi tạo dependency injection
-  runApp(const MyApp());
+  await di.init();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login App',
-      debugShowCheckedModeBanner: false,
+      title: 'Number Trivia',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
-        inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
-        ),
+        primaryColor: Colors.green.shade800,
+        colorScheme:
+            ColorScheme.fromSwatch().copyWith(secondary: Colors.green.shade600),
       ),
-      home: const LoginPage(),
+      home: NumberTriviaPage(),
     );
   }
 }
