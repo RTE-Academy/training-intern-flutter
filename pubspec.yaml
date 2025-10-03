@@ -29,9 +29,17 @@ dependencies:
   # Local cache
   shared_preferences: ^2.3.2
   internet_connection_checker: ^3.0.1
+  dio: ^5.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^5.4.4
   build_runner: ^2.4.8
+
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the Material Icons class.
+  uses-material-design: true
+  generate: true
