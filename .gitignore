@@ -5,9 +5,12 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -22,12 +25,18 @@
 
 # Flutter/Dart/Pub related
 **/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .packages
+.flutter-plugins-dependencies
 .pub-cache/
 .pub/
+.env
 /build/
+
+# Symbolication related
+app.*.symbols
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -37,6 +46,18 @@
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+/lib/generated/
+/android/app/.cxx/
+/android/build/
+
 
 # iOS/XCode related
 **/ios/**/*.mode1v3

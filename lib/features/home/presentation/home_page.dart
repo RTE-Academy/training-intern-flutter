@@ -8,16 +8,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          ), //back
-        ),
-        title: const Text("Home"),
-      ),
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () => Navigator.pushReplacement(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const LoginPage()),
+      //     ), //back
+      //   ),
+      //   title: const Text("Home"),
+      // ),
       body: Center(
         child: Text(
           "Xin chào $username 👋",
