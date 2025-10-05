@@ -11,14 +11,14 @@ import 'core/util/input_converter.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
-// import 'features/home/movies/data/datasources/movie_remote_datasource.dart';
-// import 'features/home/movies/data/repositories/movie_repository_impl.dart';
-// import 'features/home/movies/domain/repositories/movie_repository.dart';
-// import 'features/home/movies/domain/usecases/get_nowplaying_movie_usecase.dart';
-// import 'features/home/movies/domain/usecases/get_popular_movie_usecase.dart';
-// import 'features/home/movies/domain/usecases/get_toprated_movie_usecase.dart';
-// import 'features/home/movies/domain/usecases/get_upcoming_movie_usecase.dart';
-// import 'features/home/movies/presentation/bloc/movie_bloc.dart';
+import 'features/home/movies/data/datasources/movie_remote_datasource.dart';
+import 'features/home/movies/data/repositories/movie_repository_impl.dart';
+import 'features/home/movies/domain/repositories/movie_repository.dart';
+import 'features/home/movies/domain/usecases/get_nowplaying_movie_usecase.dart';
+import 'features/home/movies/domain/usecases/get_popular_movie_usecase.dart';
+import 'features/home/movies/domain/usecases/get_toprated_movie_usecase.dart';
+import 'features/home/movies/domain/usecases/get_upcoming_movie_usecase.dart';
+import 'features/home/movies/presentation/bloc/movie_bloc.dart';
 import 'features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
 import 'features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
@@ -46,13 +46,13 @@ Future<void> init() async {
   );
 
   //Bloc_Movie
-  // sl.registerFactory(() => MovieBloc(
-  //     getNowPlayingMovies: sl(),
-  //     getPopularMovies: sl(),
-  //     getTopRatedMovies: sl(),
-  //     getUpcomingMovies: sl(),
-  //   )
-  // );
+  sl.registerFactory(() => MovieBloc(
+      getNowPlayingMovies: sl(),
+      getPopularMovies: sl(),
+      getTopRatedMovies: sl(),
+      getUpcomingMovies: sl(),
+    )
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetConcreteNumberTrivia(sl()));
@@ -62,10 +62,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoginUsecase(sl()));
 
   // Use cases_Movie
-  // sl.registerLazySingleton(() => GetNowPlayingMovies(sl()));
-  // sl.registerLazySingleton(() => GetPopularMovie(sl()));
-  // sl.registerLazySingleton(() => GetTopRatedMovie(sl()));
-  // sl.registerLazySingleton(() => GetUpcomingMovie(sl()));
+  sl.registerLazySingleton(() => GetNowPlayingMovies(sl()));
+  sl.registerLazySingleton(() => GetPopularMovie(sl()));
+  sl.registerLazySingleton(() => GetTopRatedMovie(sl()));
+  sl.registerLazySingleton(() => GetUpcomingMovie(sl()));
 
   // Repository
   sl.registerLazySingleton<NumberTriviaRepository>(
@@ -91,11 +91,11 @@ Future<void> init() async {
   );
 
   // Repository_Movie
-  // sl.registerLazySingleton<MovieRepository>(
-  //   () => MovieRepositoryImpl(
-  //     remoteDataSource: sl(),
-  //   ),
-  // );
+  sl.registerLazySingleton<MovieRepository>(
+    () => MovieRepositoryImpl(
+      remoteDataSource: sl(),
+    ),
+  );
 
   // Data sources
   sl.registerLazySingleton<NumberTriviaRemoteDataSource>(
@@ -109,9 +109,9 @@ Future<void> init() async {
 
 
   // Data sources_Movie
-  // sl.registerLazySingleton<MovieRemoteDataSource>(
-  //   () => MovieRemoteDataSourceImpl(client: sl()),
-  // );
+  sl.registerLazySingleton<MovieRemoteDataSource>(
+    () => MovieRemoteDataSourceImpl(),
+  );
 
   //! Core
   sl.registerLazySingleton(() => InputConverter());

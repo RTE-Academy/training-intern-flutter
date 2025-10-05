@@ -15,7 +15,6 @@ class AuthRepositoryImpl implements AuthRepository {
       final userModel = await remoteDataSource.login(username, password);
       return Right(User.fromModel(userModel));
     } catch (e) {
-      print("Repository login error: $e");
       return Left(ServerFailure());
     }
   }
