@@ -98,33 +98,42 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 24),
 
           // Login Button
-          ElevatedButton(
-            onPressed: widget.isLoading ? null : widget.onLogin,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
+          Material(
+            borderRadius: BorderRadius.circular(30),
+            child: Ink(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)],
+                ),
                 borderRadius: BorderRadius.circular(30),
               ),
-            ),
-            child: widget.isLoading
-                ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
+              child: InkWell(
+                onTap: widget.isLoading ? null : widget.onLogin,
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  alignment: Alignment.center,
+                  child: widget.isLoading
+                      ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                      : const Text(
+                    'Đăng nhập',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            )
-                : const Text(
-              'Đăng nhập',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
             ),
-          ),
+          )
         ],
       ),
     );
