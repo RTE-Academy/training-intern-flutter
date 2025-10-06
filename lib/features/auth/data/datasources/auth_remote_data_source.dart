@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
-import 'dio_base.dart';
-import 'dio_path.dart';
+import '../../../../core/dio/dio_base.dart';
+import '../../../../core/dio/dio_path.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
