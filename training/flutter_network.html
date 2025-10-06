@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Integration with Dio in Flutter</title>
+    <style>
+        :root {
+          --bg: #0f1724;
+          --card: #0b1220;
+          --accent: #7dd3fc;
+          --muted: #94a3b8;
+          --glass: rgba(255,255,255,0.03);
+          --radius: 12px;
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          color-scheme: dark;
+        }
+        body {
+          margin: 0;
+          background: linear-gradient(180deg, #071127, #0e1724);
+          color: #e6eef8;
+          line-height: 1.6;
+        }
+        .wrap {
+          max-width: 1000px;
+          margin: 36px auto;
+          padding: 28px;
+          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+          border-radius: var(--radius);
+          box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+        }
+        h1 { color: var(--accent); font-size: 28px; margin-bottom: 6px; }
+        p.lead { color: var(--muted); }
+        section { background: var(--card); margin: 18px 0; padding: 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.03); }
+        h2 { color: #d6f7ff; margin-bottom: 8px; }
+        h3 { color: #bfefff; margin: 12px 0 6px; }
+        pre { background: transparent; padding: 10px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05); overflow-x: auto; }
+        code { font-family: "Source Code Pro", monospace; font-size: 13px; color: #dff6ff; }
+        ul { color: var(--muted); }
+        .exercise { background: linear-gradient(90deg, rgba(125,211,252,0.03), rgba(125,211,252,0.01)); padding: 10px; border-radius: 8px; border: 1px solid rgba(125,211,252,0.06); }
+        .tip { background: rgba(125,211,252,0.05); padding: 8px; border-radius: 6px; margin: 8px 0; font-size: 14px; color: var(--muted); }
+        footer { margin-top: 20px; text-align: center; color: var(--muted); font-size: 13px; }
+        .chip { background: var(--glass); padding: 6px 8px; border-radius: 8px; font-size: 13px; color: var(--muted); display: inline-block; margin: 3px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <h1>API Integration with Dio - GET/POST Requests, JSON Parsing & Repository Pattern</h1>
+
+    <section>
+        <h2>1. Introduction to Dio</h2>
+        <p><strong>Dio</strong> is a powerful HTTP client for Dart and Flutter that supports
+            interceptors, global configuration, FormData, request cancellation, and more. It’s
+            widely used for handling network requests efficiently.</p>
+
+        <pre><code>dependencies:
+  dio: ^5.0.0
+    </code></pre>
+
+        <p>Install dependencies by running:</p>
+        <pre><code>flutter pub get</code></pre>
+    </section>
+
+    <section>
+        <h2>2. Making a GET Request</h2>
+        <p>Use Dio to fetch data from a REST API endpoint:</p>
+
+        <pre><code>import 'package:dio/dio.dart';
+
+final dio = Dio();
+
+Future&lt;void&gt; fetchUsers() async {
+  try {
+    final response = await dio.get('https://jsonplaceholder.typicode.com/users');
+    print(response.data);
+  } catch (e) {
+    print('Error: $e');
+  }
+}</code></pre>
+
+        <p><strong>Explanation:</strong></p>
+        <ul>
+            <li><code>dio.get()</code> sends a GET request to the specified URL.</li>
+            <li>Response data can be directly accessed using <code>response.data</code>.</li>
+            <li>Use <code>try-catch</code> for error handling.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. Making a POST Request</h2>
+        <p>Send data to a server using POST requests:</p>
+
+        <pre><code>Future&lt;void&gt; createUser() async {
+  try {
+    final response = await dio.post(
+      'https://jsonplaceholder.typicode.com/users',
+      data: {
+        'name': 'John Doe',
+        'email': 'john@example.com',
+      },
+    );
+    print(response.data);
+  } catch (e) {
+    print('Error: $e');
+  }
+}</code></pre>
+
+        <p><strong>Notes:</strong></p>
+        <ul>
+            <li>Use <code>data</code> parameter to pass the request body.</li>
+            <li>Ensure your API endpoint supports POST operations.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>4. JSON Parsing in Flutter</h2>
+        <p>Convert JSON data from the API into Dart model objects for better structure and
+            readability.</p>
+
+        <pre><code>class User {
+  final int id;
+  final String name;
+  final String email;
+
+  User({required this.id, required this.name, required this.email});
+
+  factory User.fromJson(Map&lt;String, dynamic&gt; json) {
+    return User(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+    );
+  }
+}</code></pre>
+
+        <p>Parsing API response:</p>
+
+        <pre><code>Future&lt;List&lt;User&gt;&gt; fetchUsers() async {
+  final response = await dio.get('https://jsonplaceholder.typicode.com/users');
+  final List usersJson = response.data;
+  return usersJson.map((json) =&gt; User.fromJson(json)).toList();
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>5. Repository Pattern</h2>
+        <p>The Repository pattern helps separate the data layer from the UI and business logic
+            layers, improving maintainability and testability.</p>
+
+        <pre><code>// user_repository.dart
+import 'package:dio/dio.dart';
+import 'user_model.dart';
+
+class UserRepository {
+  final Dio _dio = Dio();
+
+  Future&lt;List&lt;User&gt;&gt; getUsers() async {
+    final response = await _dio.get('https://jsonplaceholder.typicode.com/users');
+    final List data = response.data;
+    return data.map((json) =&gt; User.fromJson(json)).toList();
+  }
+
+  Future&lt;User&gt; createUser(User user) async {
+    final response = await _dio.post(
+      'https://jsonplaceholder.typicode.com/users',
+      data: {
+        'name': user.name,
+        'email': user.email,
+      },
+    );
+    return User.fromJson(response.data);
+  }
+}</code></pre>
+
+        <p><strong>Advantages:</strong></p>
+        <ul>
+            <li>Separates concerns – UI doesn’t handle networking directly.</li>
+            <li>Improves testability by mocking the repository.</li>
+            <li>Makes future refactors easier (e.g., switching APIs).</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>6. Practical Example: Fetch & Display Data</h2>
+
+        <pre><code>class UserScreen extends StatefulWidget {
+  const UserScreen({super.key});
+
+  @override
+  State&lt;UserScreen&gt; createState() =&gt; _UserScreenState();
+}
+
+class _UserScreenState extends State&lt;UserScreen&gt; {
+  final UserRepository _repository = UserRepository();
+  late Future&lt;List&lt;User&gt;&gt; usersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    usersFuture = _repository.getUsers();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('User List')),
+      body: FutureBuilder&lt;List&lt;User&gt;&gt;(
+        future: usersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No users found'));
+          }
+          final users = snapshot.data!;
+          return ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              final user = users[index];
+              return ListTile(
+                title: Text(user.name),
+                subtitle: Text(user.email),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}</code></pre>
+
+        <p>This example demonstrates a full cycle: fetching API data, parsing JSON, and displaying
+            it using Flutter widgets.</p>
+    </section>
+
+    <section>
+        <h2>7. Summary</h2>
+        <ul>
+            <li>Used <strong>Dio</strong> for GET/POST requests.</li>
+            <li>Learned <strong>JSON parsing</strong> into model classes.</li>
+            <li>Implemented <strong>Repository pattern</strong> for clean architecture.</li>
+            <li>Displayed API data in Flutter UI.</li>
+        </ul>
+
+        <p>With these concepts, you can now confidently connect your Flutter apps to RESTful APIs in
+            a structured and maintainable way.</p>
+    </section>
+</div>
+</body>
+</html>

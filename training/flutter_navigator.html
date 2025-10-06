@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Flutter Navigation 1.0 - Training Material</title>
+    <style>
+        :root {
+          --bg: #0f1724;
+          --card: #0b1220;
+          --accent: #7dd3fc;
+          --muted: #94a3b8;
+          --glass: rgba(255,255,255,0.03);
+          --radius: 12px;
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          color-scheme: dark;
+        }
+        body {
+          margin: 0;
+          background: linear-gradient(180deg, #071127, #0e1724);
+          color: #e6eef8;
+          line-height: 1.6;
+        }
+        .wrap {
+          max-width: 1000px;
+          margin: 36px auto;
+          padding: 28px;
+          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+          border-radius: var(--radius);
+          box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+        }
+        h1 { color: var(--accent); font-size: 28px; margin-bottom: 6px; }
+        p.lead { color: var(--muted); }
+        section { background: var(--card); margin: 18px 0; padding: 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.03); }
+        h2 { color: #d6f7ff; margin-bottom: 8px; }
+        h3 { color: #bfefff; margin: 12px 0 6px; }
+        pre { background: transparent; padding: 10px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05); overflow-x: auto; }
+        code { font-family: "Source Code Pro", monospace; font-size: 13px; color: #dff6ff; }
+        ul { color: var(--muted); }
+        .exercise { background: linear-gradient(90deg, rgba(125,211,252,0.03), rgba(125,211,252,0.01)); padding: 10px; border-radius: 8px; border: 1px solid rgba(125,211,252,0.06); }
+        .tip { background: rgba(125,211,252,0.05); padding: 8px; border-radius: 6px; margin: 8px 0; font-size: 14px; color: var(--muted); }
+        footer { margin-top: 20px; text-align: center; color: var(--muted); font-size: 13px; }
+        .chip { background: var(--glass); padding: 6px 8px; border-radius: 8px; font-size: 13px; color: var(--muted); display: inline-block; margin: 3px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+<a href="../README.md" style="display: block; margin-bottom: 12px; color: var(--muted);">&larr; Back to Training Plan</a>
+<header>
+    <h1>Flutter Navigation 1.0, Data Passing & Routing Setup</h1>
+    <p>Step-by-step learning guide for beginners</p>
+</header>
+
+<section id="introduction">
+    <h2>1. Introduction to Navigation in Flutter</h2>
+    <p>
+        Navigation in Flutter allows you to move between different screens (called
+        <strong>routes</strong>).
+        The <code>Navigator</code> widget manages a stack of routes — each time you navigate, a new
+        route is pushed onto the stack, and when you go back, it’s popped off.
+    </p>
+    <ul>
+        <li><strong>Navigator 1.0</strong> uses an imperative approach (push and pop).</li>
+        <li><strong>Navigator 2.0</strong> is declarative and more advanced (used for large apps).
+        </li>
+    </ul>
+</section>
+
+<section id="methods">
+    <h2>2. Basic Navigator 1.0 Methods</h2>
+    <p>The most common methods used for navigation are:</p>
+    <ul>
+        <li><code>Navigator.push()</code> – Navigate to a new screen.</li>
+        <li><code>Navigator.pop()</code> – Go back to the previous screen.</li>
+        <li><code>Navigator.pushReplacement()</code> – Replace the current route with a new one.
+        </li>
+        <li><code>Navigator.pushNamed()</code> – Navigate using route names (configured in <code>MaterialApp</code>).
+        </li>
+    </ul>
+
+    <pre><code class="language-dart">Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => SecondScreen()),
+);
+
+// Go back
+Navigator.pop(context);
+</code></pre>
+</section>
+
+<section id="data-passing">
+    <h2>3. Passing Data Between Screens</h2>
+    <p>
+        You can pass data when navigating to a new screen by using constructor parameters. The
+        receiving screen should have a property to accept the data.
+    </p>
+
+    <pre><code class="language-dart">// Passing data
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => DetailScreen(data: 'Hello from Home!'),
+  ),
+);
+
+// Receiving data in DetailScreen
+class DetailScreen extends StatelessWidget {
+  final String data;
+
+  const DetailScreen({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Detail Screen')),
+      body: Center(
+        child: Text(data, style: TextStyle(fontSize: 20)),
+      ),
+    );
+  }
+}
+</code></pre>
+
+    <p>
+        You can also return data when popping back to the previous screen using <code>Navigator.pop(context,
+        result)</code>.
+    </p>
+</section>
+
+<section id="named-routes">
+    <h2>4. Setting Up Named Routes</h2>
+    <p>
+        Named routes make navigation more organized and scalable. You define route names in <code>MaterialApp</code>
+        and call them using <code>Navigator.pushNamed()</code>.
+    </p>
+
+    <pre><code class="language-dart">void main() {
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => HomeScreen(),
+      '/detail': (context) => DetailScreen(data: 'Data from named route'),
+    },
+  ));
+}
+
+// Navigate using route name
+Navigator.pushNamed(context, '/detail');
+</code></pre>
+
+    <p>
+        You can also pass arguments through named routes using <code>Navigator.pushNamed()</code>
+        and retrieve them via <code>ModalRoute.of(context)!.settings.arguments</code>.
+    </p>
+
+    <pre><code class="language-dart">// Passing arguments
+Navigator.pushNamed(
+  context,
+  '/detail',
+  arguments: 'Data from Home',
+);
+
+// Receiving arguments
+final args = ModalRoute.of(context)!.settings.arguments as String;
+</code></pre>
+</section>
+
+<section id="example">
+    <h2>5. Complete Example: Two-Screen Navigation</h2>
+
+    <pre><code class="language-dart">// main.dart
+void main() {
+  runApp(MaterialApp(
+    home: HomeScreen(),
+  ));
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home Screen')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Details'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DetailScreen(data: 'From Home!')),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  final String data;
+  const DetailScreen({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Detail Screen')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(data, style: TextStyle(fontSize: 20)),
+            ElevatedButton(
+              child: Text('Go Back'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+</section>
+
+<section id="best-practices">
+    <h2>6. Best Practices & Tips</h2>
+    <ul>
+        <li>Keep routes organized in a separate file if your app grows large.</li>
+        <li>Use named routes for better maintainability.</li>
+        <li>Always handle null-safety when receiving data via <code>ModalRoute</code>.</li>
+        <li>Prefer <strong>Navigator 2.0</strong> for apps requiring deep linking or complex
+            navigation flows.
+        </li>
+    </ul>
+</section>
+<footer>
+    <p>Flutter Training Series — Navigation 1.0 Module</p>
+</footer>
+</div>
+</body>
+</html>

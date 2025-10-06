@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flutter State Management with Bloc</title>
+    <style>
+      :root {
+        --bg: #0f1724;
+        --card: #0b1220;
+        --accent: #7dd3fc;
+        --muted: #94a3b8;
+        --glass: rgba(255, 255, 255, 0.03);
+        --radius: 12px;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #071127, #0e1724);
+        color: #e6eef8;
+        line-height: 1.6;
+      }
+      .wrap {
+        max-width: 1000px;
+        margin: 36px auto;
+        padding: 28px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: var(--radius);
+        box-shadow: 0 8px 30px rgba(2, 6, 23, 0.7);
+      }
+      h1 {
+        color: var(--accent);
+        font-size: 28px;
+        margin-bottom: 6px;
+      }
+      p.lead {
+        color: var(--muted);
+      }
+      section {
+        background: var(--card);
+        margin: 18px 0;
+        padding: 18px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      h2 {
+        color: #d6f7ff;
+        margin-bottom: 8px;
+      }
+      h3 {
+        color: #bfefff;
+        margin: 12px 0 6px;
+      }
+      pre {
+        background: transparent;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px dashed rgba(255, 255, 255, 0.05);
+        overflow-x: auto;
+      }
+      code {
+        font-family: "Source Code Pro", monospace;
+        font-size: 13px;
+        color: #dff6ff;
+      }
+      ul {
+        color: var(--muted);
+      }
+      .exercise {
+        background: linear-gradient(
+          90deg,
+          rgba(125, 211, 252, 0.03),
+          rgba(125, 211, 252, 0.01)
+        );
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(125, 211, 252, 0.06);
+      }
+      .tip {
+        background: rgba(125, 211, 252, 0.05);
+        padding: 8px;
+        border-radius: 6px;
+        margin: 8px 0;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      footer {
+        margin-top: 20px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .chip {
+        background: var(--glass);
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 13px;
+        color: var(--muted);
+        display: inline-block;
+        margin: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>
+        State Management (Bloc) - Event–Bloc–State Cycle & flutter_bloc Usage
+      </h1>
+
+      <section>
+        <h2>1. Introduction to Bloc Pattern</h2>
+        <p>
+          <strong>Bloc (Business Logic Component)</strong> is a popular state
+          management solution in Flutter that helps separate business logic from
+          the UI. It follows the principle of unidirectional data flow, making
+          the app more predictable and easier to test.
+        </p>
+
+        <ul>
+          <li>Centralizes state and logic in <code>Bloc</code> classes.</li>
+          <li>UI reacts to state changes automatically.</li>
+          <li>Improves code organization and testability.</li>
+        </ul>
+
+        <pre><code>dependencies:
+  flutter_bloc: ^8.1.2</code></pre>
+
+        <p>Run <code>flutter pub get</code> to install the dependency.</p>
+      </section>
+
+      <section>
+        <h2>2. Bloc Architecture Overview</h2>
+        <p>
+          The <strong>Bloc pattern</strong> revolves around three main
+          components:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Event:</strong> User actions or inputs that trigger logic
+            (e.g., button pressed).
+          </li>
+          <li>
+            <strong>Bloc:</strong> Handles events, processes logic, and emits
+            new states.
+          </li>
+          <li>
+            <strong>State:</strong> Represents the data or UI condition to
+            display.
+          </li>
+        </ul>
+
+        <img
+          src="./assets/bloc_architecture.webp"
+          alt="Bloc Architecture Diagram"
+          width="600"
+        />
+      </section>
+
+      <section>
+        <h2>3. Event–Bloc–State Cycle Example</h2>
+
+        <p>Let's implement a simple counter using Bloc.</p>
+
+        <h3>Event</h3>
+        <pre><code>abstract class CounterEvent {}
+class Increment extends CounterEvent {}
+class Decrement extends CounterEvent {}</code></pre>
+
+        <h3>State</h3>
+        <pre><code>class CounterState {
+  final int value;
+  CounterState(this.value);
+}</code></pre>
+
+        <h3>Bloc</h3>
+        <pre><code>import 'package:flutter_bloc/flutter_bloc.dart';
+
+class CounterBloc extends Bloc&lt;CounterEvent, CounterState&gt; {
+  CounterBloc() : super(CounterState(0)) {
+    on&lt;Increment&gt;((event, emit) =&gt; emit(CounterState(state.value + 1)));
+    on&lt;Decrement&gt;((event, emit) =&gt; emit(CounterState(state.value - 1)));
+  }
+}</code></pre>
+
+        <p><strong>Explanation:</strong></p>
+        <ul>
+          <li>
+            The <code>CounterBloc</code> starts with an initial state of
+            <code>0</code>.
+          </li>
+          <li>
+            When an <code>Increment</code> event is added, it emits a new state
+            with an incremented value.
+          </li>
+          <li>Same for <code>Decrement</code> events.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. Integrating Bloc with Flutter UI</h2>
+
+        <p>
+          To use Bloc in your widget tree, wrap your app or screen with a
+          <code>BlocProvider</code> and use <code>BlocBuilder</code> to rebuild
+          the UI based on state changes.
+        </p>
+
+        <pre><code>void main() {
+  runApp(
+    BlocProvider(
+      create: (context) =&gt; CounterBloc(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: CounterPage(),
+    );
+  }
+}
+
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final counterBloc = context.read&lt;CounterBloc&gt;();
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Bloc Counter')),
+      body: Center(
+        child: BlocBuilder&lt;CounterBloc, CounterState&gt;(
+          builder: (context, state) {
+            return Text(
+              'Counter: ${state.value}',
+              style: const TextStyle(fontSize: 28),
+            );
+          },
+        ),
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: () =&gt; counterBloc.add(Increment()),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(width: 10),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: () =&gt; counterBloc.add(Decrement()),
+            child: const Icon(Icons.remove),
+          ),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+      </section>
+
+      <section>
+        <h2>5. BlocListener and BlocConsumer</h2>
+
+        <p>
+          <strong>BlocListener</strong> is used when you want to perform an
+          action (e.g., show snackbar) based on state changes without rebuilding
+          the UI.
+        </p>
+
+        <pre><code>BlocListener&lt;CounterBloc, CounterState&gt;(
+  listener: (context, state) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('New value: ${state.value}')),
+    );
+  },
+  child: BlocBuilder&lt;CounterBloc, CounterState&gt;(
+    builder: (context, state) {
+      return Text('Counter: ${state.value}');
+    },
+  ),
+)</code></pre>
+
+        <p>
+          <strong>BlocConsumer</strong> combines both
+          <code>BlocBuilder</code> and <code>BlocListener</code> for cleaner
+          integration.
+        </p>
+      </section>
+
+      <section>
+        <h2>6. Best Practices</h2>
+        <ul>
+          <li>Keep UI free of business logic.</li>
+          <li>Use immutable states for better predictability.</li>
+          <li>
+            Organize code in folders: <code>bloc/</code>, <code>model/</code>,
+            <code>view/</code>.
+          </li>
+          <li>
+            Prefer <code>BlocProvider</code> at screen-level unless globally
+            needed.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Summary</h2>
+        <ul>
+          <li>Bloc separates business logic from UI effectively.</li>
+          <li>Events trigger logic and emit new states.</li>
+          <li>
+            <code>flutter_bloc</code> provides tools like
+            <code>BlocBuilder</code>, <code>BlocListener</code>, and
+            <code>BlocProvider</code> to integrate with Flutter easily.
+          </li>
+        </ul>
+
+        <p>
+          With this understanding, you can now manage complex app states using
+          the <strong>Bloc pattern</strong> in a clean and scalable way.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>

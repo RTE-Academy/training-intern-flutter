@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Flutter UI Training — Widgets, Layout, Theming & Responsive Design</title>
+    <style>
+        :root {
+          --bg: #0f1724;
+          --card: #0b1220;
+          --accent: #7dd3fc;
+          --muted: #94a3b8;
+          --glass: rgba(255,255,255,0.03);
+          --radius: 12px;
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          color-scheme: dark;
+        }
+        body {
+          margin: 0;
+          background: linear-gradient(180deg, #071127, #0e1724);
+          color: #e6eef8;
+          line-height: 1.6;
+        }
+        .wrap {
+          max-width: 1000px;
+          margin: 36px auto;
+          padding: 28px;
+          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+          border-radius: var(--radius);
+          box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+        }
+        h1 { color: var(--accent); font-size: 28px; margin-bottom: 6px; }
+        p.lead { color: var(--muted); }
+        section { background: var(--card); margin: 18px 0; padding: 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.03); }
+        h2 { color: #d6f7ff; margin-bottom: 8px; }
+        h3 { color: #bfefff; margin: 12px 0 6px; }
+        pre { background: transparent; padding: 10px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05); overflow-x: auto; }
+        code { font-family: "Source Code Pro", monospace; font-size: 13px; color: #dff6ff; }
+        ul { color: var(--muted); }
+        .exercise { background: linear-gradient(90deg, rgba(125,211,252,0.03), rgba(125,211,252,0.01)); padding: 10px; border-radius: 8px; border: 1px solid rgba(125,211,252,0.06); }
+        .tip { background: rgba(125,211,252,0.05); padding: 8px; border-radius: 6px; margin: 8px 0; font-size: 14px; color: var(--muted); }
+        footer { margin-top: 20px; text-align: center; color: var(--muted); font-size: 13px; }
+        .chip { background: var(--glass); padding: 6px 8px; border-radius: 8px; font-size: 13px; color: var(--muted); display: inline-block; margin: 3px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Widgets, Layout, Theming & Responsive Design</h1>
+    <p class="lead">Learn how Flutter builds UIs using widgets, layouts, themes, and how to adapt
+        your app for all screen sizes.</p>
+
+    <!-- SECTION 1: Widgets -->
+    <section id="widgets">
+        <h2>1. Widgets — The Building Blocks of Flutter</h2>
+        <p>
+            Everything in Flutter is a widget — from a simple <code>Text</code> to a complete <code>Scaffold</code>.
+            Widgets are categorized into:
+        </p>
+        <ul>
+            <li><strong>Structural Widgets</strong> — e.g., <code>Scaffold</code>,
+                <code>AppBar</code>, <code>Container</code>.
+            </li>
+            <li><strong>Styling Widgets</strong> — e.g., <code>Padding</code>, <code>Align</code>,
+                <code>Center</code>.
+            </li>
+            <li><strong>Functional Widgets</strong> — e.g., <code>TextField</code>,
+                <code>Button</code>, <code>Image</code>.
+            </li>
+        </ul>
+
+        <h3>Example</h3>
+        <pre><code>class HelloWidget extends StatelessWidget {
+  const HelloWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Hello, Flutter!',
+        style: TextStyle(fontSize: 24, color: Colors.blueAccent),
+      ),
+    );
+  }
+}</code></pre>
+
+        <div class="exercise">
+            <strong>Exercise:</strong> Create a custom widget called <code>ProfileCard</code> that
+            displays a user’s avatar, name, and role.
+        </div>
+    </section>
+
+    <!-- SECTION 2: Layout -->
+    <section id="layout">
+        <h2>2. Layout — Organizing Widgets on Screen</h2>
+        <p>Layout widgets define how child widgets are arranged in your app. The most common ones
+            are:</p>
+        <ul>
+            <li><strong>Row</strong> — horizontal alignment</li>
+            <li><strong>Column</strong> — vertical alignment</li>
+            <li><strong>Stack</strong> — overlaying elements</li>
+            <li><strong>Expanded</strong> & <strong>Flexible</strong> — distribute space
+                proportionally
+            </li>
+            <li><strong>ListView</strong> — scrollable list</li>
+        </ul>
+
+        <h3>Column Example</h3>
+        <pre><code>class MyLayout extends StatelessWidget {
+  const MyLayout({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Text('Welcome'),
+        SizedBox(height: 10),
+        Text('This is a column layout'),
+      ],
+    );
+  }
+}</code></pre>
+
+        <h3>Row + Expanded Example</h3>
+        <pre><code>Row(
+  children: [
+    Expanded(child: Container(color: Colors.red, height: 50)),
+    Expanded(child: Container(color: Colors.green, height: 50)),
+    Expanded(child: Container(color: Colors.blue, height: 50)),
+  ],
+)</code></pre>
+
+        <div class="exercise">
+            <strong>Exercise:</strong> Build a simple dashboard using <code>Row</code> and <code>Column</code>
+            to show 3 statistic boxes horizontally.
+        </div>
+    </section>
+
+    <!-- SECTION 3: Theming -->
+    <section id="theming">
+        <h2>3. Theming — Consistent Styles Across Your App</h2>
+        <p>
+            Flutter uses <code>ThemeData</code> to define your app’s visual style: colors,
+            typography, button styles, and more.
+        </p>
+
+        <h3>Light/Dark Theme Setup</h3>
+        <pre><code>MaterialApp(
+  title: 'Themed App',
+  theme: ThemeData(
+    brightness: Brightness.light,
+    primarySwatch: Colors.indigo,
+  ),
+  darkTheme: ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.dark(primary: Colors.indigo),
+  ),
+  themeMode: ThemeMode.system,
+  home: const HomePage(),
+);</code></pre>
+
+        <h3>Using Theme in Widgets</h3>
+        <pre><code>Text(
+  'Hello Theme!',
+  style: Theme.of(context).textTheme.headlineSmall,
+);</code></pre>
+
+        <div class="tip">
+            Use <code>Theme.of(context)</code> to access theme colors and styles anywhere in your
+            widget tree.
+        </div>
+
+        <h3>Custom Theme Extension</h3>
+        <p>You can extend <code>ThemeData</code> for your brand styles.</p>
+        <pre><code>extension AppColors on ThemeData {
+  Color get success => Colors.greenAccent;
+  Color get danger => Colors.redAccent;
+}</code></pre>
+
+        <div class="exercise">
+            <strong>Exercise:</strong> Create a custom theme with your own color palette and apply
+            it to all buttons in the app.
+        </div>
+    </section>
+
+    <!-- SECTION 4: Responsive Design -->
+    <section id="responsive">
+        <h2>4. Responsive Design — Adapting to Different Screens</h2>
+        <p>
+            Flutter runs on mobile, tablet, desktop, and web. A good UI must adapt to screen size,
+            orientation, and device type.
+        </p>
+
+        <h3>Using <code>MediaQuery</code></h3>
+        <pre><code>Widget build(BuildContext context) {
+  var size = MediaQuery.of(context).size;
+  var isTablet = size.width &gt; 600;
+  return Center(
+    child: Text(isTablet ? 'Tablet view' : 'Mobile view'),
+  );
+}</code></pre>
+
+        <h3>LayoutBuilder</h3>
+        <p><code>LayoutBuilder</code> helps you render different widgets depending on available
+            space.</p>
+        <pre><code>LayoutBuilder(
+  builder: (context, constraints) {
+    if (constraints.maxWidth &gt; 600) {
+      return const TabletLayout();
+    } else {
+      return const MobileLayout();
+    }
+  },
+);</code></pre>
+
+        <h3>ResponsiveRowColumn (from <code>flutter_layout_grid</code>)</h3>
+        <p>Use community packages like <code>flutter_layout_grid</code> or <code>responsive_framework</code>
+            for advanced layouts.</p>
+
+        <h3>OrientationBuilder</h3>
+        <pre><code>OrientationBuilder(
+  builder: (context, orientation) {
+    return orientation == Orientation.portrait
+        ? const PortraitLayout()
+        : const LandscapeLayout();
+  },
+);</code></pre>
+
+        <div class="exercise">
+            <strong>Exercise:</strong> Build a profile screen that switches between a vertical
+            layout (mobile) and a horizontal layout (tablet).
+        </div>
+    </section>
+
+    <!-- SECTION 5: Putting It All Together -->
+    <section id="integration">
+        <h2>5. Putting It All Together — Themed, Responsive App</h2>
+        <p>This example combines widgets, layout, theming, and responsiveness.</p>
+
+        <pre><code>class ResponsiveHome extends StatelessWidget {
+  const ResponsiveHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var isWide = MediaQuery.of(context).size.width &gt; 600;
+    final color = Theme.of(context).colorScheme.primary;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Responsive Themed App')),
+      body: isWide
+        ? Row(
+            children: [
+              Expanded(child: Container(color: color.withOpacity(0.1))),
+              Expanded(child: _content()),
+            ],
+          )
+        : _content(),
+    );
+  }
+
+  Widget _content() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text('Hello Flutter UI!'),
+          SizedBox(height: 8),
+          Text('This adapts to your screen.'),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+
+        <div class="tip">
+            Combine layout widgets with theme-aware colors to create beautiful, consistent, and
+            adaptive UIs.
+        </div>
+    </section>
+
+    <section id="resources">
+        <h2>6. Next Steps & Resources</h2>
+        <ul>
+            <li>🧱 Learn advanced layout: <code>GridView</code>, <code>CustomScrollView</code>,
+                <code>SliverList</code></li>
+            <li>🎨 Deep dive into <strong>Material 3 (M3)</strong> and <strong>ColorScheme</strong>
+            </li>
+            <li>📱 Explore <strong>responsive_framework</strong> and
+                <strong>flutter_screenutil</strong></li>
+            <li>💡 Experiment with adaptive UI using <code>AdaptiveLayout</code> (Material 3)</li>
+        </ul>
+    </section>
+
+    <footer>
+        © Flutter Mentor Training — Widgets, Layout & Theming. Built for new Flutter developers 🚀
+    </footer>
+</div>
+</body>
+</html>
