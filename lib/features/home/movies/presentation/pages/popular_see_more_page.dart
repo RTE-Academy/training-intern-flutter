@@ -36,8 +36,8 @@ class _PopularSeeMoreViewState extends State<PopularSeeMoreView> {
   void _loadMore() {
     _currentPage++;
     context.read<MovieBloc>().add(
-      LoadMoreMoviesEvent(MovieCategory.popular, _currentPage),
-    );
+          LoadMoreMoviesEvent(MovieCategory.popular, _currentPage),
+        );
   }
 
   @override
@@ -65,7 +65,8 @@ class _PopularSeeMoreViewState extends State<PopularSeeMoreView> {
       body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is MovieLoading && _currentPage == 1) {
-            return const Center(child: CircularProgressIndicator(color: Colors.blue));
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.blue));
           } else if (state is MovieLoaded) {
             final movies = state.popularMovies;
 
@@ -74,7 +75,8 @@ class _PopularSeeMoreViewState extends State<PopularSeeMoreView> {
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.65,
                       crossAxisSpacing: 8,
@@ -95,9 +97,11 @@ class _PopularSeeMoreViewState extends State<PopularSeeMoreView> {
                                 child: Image.network(
                                   'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) => Container(
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
                                     color: Colors.grey[800],
-                                    child: const Icon(Icons.broken_image, color: Colors.white70),
+                                    child: const Icon(Icons.broken_image,
+                                        color: Colors.white70),
                                   ),
                                 ),
                               ),
@@ -120,7 +124,8 @@ class _PopularSeeMoreViewState extends State<PopularSeeMoreView> {
                 ),
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)],
@@ -165,7 +170,8 @@ class _PopularSeeMoreViewState extends State<PopularSeeMoreView> {
             );
           }
 
-          return const Center(child: CircularProgressIndicator(color: Colors.blue));
+          return const Center(
+              child: CircularProgressIndicator(color: Colors.blue));
         },
       ),
     );

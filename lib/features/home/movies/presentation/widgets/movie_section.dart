@@ -9,7 +9,12 @@ class MovieSection extends StatelessWidget {
   final List<Movie> movies;
   final VoidCallback? onSeeMoreTap;
 
-  const MovieSection({super.key, required this.title, required this.movies, this.onSeeMoreTap,});
+  const MovieSection({
+    super.key,
+    required this.title,
+    required this.movies,
+    this.onSeeMoreTap,
+  });
 
   @override
   Widget build(BuildContext context) {

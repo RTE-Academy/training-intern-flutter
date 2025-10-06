@@ -9,13 +9,13 @@ class MovieModel extends Movie {
     required String backdropPath,
     required String releaseDate,
   }) : super(
-    id: id,
-    title: title,
-    overview: overview,
-    posterPath: posterPath,
-    backdropPath: backdropPath,
-    releaseDate: releaseDate,
-  );
+          id: id,
+          title: title,
+          overview: overview,
+          posterPath: posterPath,
+          backdropPath: backdropPath,
+          releaseDate: releaseDate,
+        );
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(

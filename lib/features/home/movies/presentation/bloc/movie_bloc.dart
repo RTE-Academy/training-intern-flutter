@@ -25,9 +25,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   }
 
   Future<void> _onGetMovies(
-      GetMoviesEvent event,
-      Emitter<MovieState> emit,
-      ) async {
+    GetMoviesEvent event,
+    Emitter<MovieState> emit,
+  ) async {
     if (event.page == 1) {
       emit(MovieLoading());
     }
@@ -40,8 +40,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     };
 
     result.fold(
-          (failure) => emit(MovieFailure("Failed to load ${event.category.name} movies")),
-          (movies) {
+      (failure) =>
+          emit(MovieFailure("Failed to load ${event.category.name} movies")),
+      (movies) {
         if (state is MovieLoaded) {
           final currentState = state as MovieLoaded;
 
@@ -51,30 +52,30 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
                 : currentState.nowPlayingMovies,
             popularMovies: event.category == MovieCategory.popular
                 ? (event.page == 1
-                ? movies
-                : [...currentState.popularMovies, ...movies])
+                    ? movies
+                    : [...currentState.popularMovies, ...movies])
                 : currentState.popularMovies,
             topRatedMovies: event.category == MovieCategory.topRated
                 ? (event.page == 1
-                ? movies
-                : [...currentState.topRatedMovies, ...movies])
+                    ? movies
+                    : [...currentState.topRatedMovies, ...movies])
                 : currentState.topRatedMovies,
             upcomingMovies: event.category == MovieCategory.upcoming
                 ? (event.page == 1
-                ? movies
-                : [...currentState.upcomingMovies, ...movies])
+                    ? movies
+                    : [...currentState.upcomingMovies, ...movies])
                 : currentState.upcomingMovies,
           ));
         } else {
           emit(MovieLoaded(
             nowPlayingMovies:
-            event.category == MovieCategory.nowPlaying ? movies : const [],
+                event.category == MovieCategory.nowPlaying ? movies : const [],
             popularMovies:
-            event.category == MovieCategory.popular ? movies : const [],
+                event.category == MovieCategory.popular ? movies : const [],
             topRatedMovies:
-            event.category == MovieCategory.topRated ? movies : const [],
+                event.category == MovieCategory.topRated ? movies : const [],
             upcomingMovies:
-            event.category == MovieCategory.upcoming ? movies : const [],
+                event.category == MovieCategory.upcoming ? movies : const [],
           ));
         }
       },
@@ -82,9 +83,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   }
 
   Future<void> _onLoadMoreMovies(
-      LoadMoreMoviesEvent event,
-      Emitter<MovieState> emit,
-      ) async {
+    LoadMoreMoviesEvent event,
+    Emitter<MovieState> emit,
+  ) async {
     if (state is! MovieLoaded) return;
 
     final currentState = state as MovieLoaded;
@@ -93,8 +94,8 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       case MovieCategory.popular:
         final result = await getPopularMovies(event.nextPage);
         result.fold(
-              (failure) => emit(MovieFailure("Failed to load more popular movies")),
-              (movies) {
+          (failure) => emit(MovieFailure("Failed to load more popular movies")),
+          (movies) {
             final updatedList = [...currentState.popularMovies, ...movies];
             emit(currentState.copyWith(popularMovies: updatedList));
           },
@@ -104,8 +105,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       case MovieCategory.topRated:
         final result = await getTopRatedMovies(event.nextPage);
         result.fold(
-              (failure) => emit(MovieFailure("Failed to load more top-rated movies")),
-              (movies) {
+          (failure) =>
+              emit(MovieFailure("Failed to load more top-rated movies")),
+          (movies) {
             final updatedList = [...currentState.topRatedMovies, ...movies];
             emit(currentState.copyWith(topRatedMovies: updatedList));
           },
@@ -115,22 +117,23 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       case MovieCategory.upcoming:
         final result = await getUpcomingMovies(event.nextPage);
         result.fold(
-              (failure) => emit(MovieFailure("Failed to load more upcoming movies")),
-              (movies) {
+          (failure) =>
+              emit(MovieFailure("Failed to load more upcoming movies")),
+          (movies) {
             final updatedList = [...currentState.upcomingMovies, ...movies];
             emit(currentState.copyWith(upcomingMovies: updatedList));
           },
         );
         break;
       case MovieCategory.nowPlaying:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
   }
 
   Future<void> _onLoadAllMovies(
-      LoadAllMoviesEvent event,
-      Emitter<MovieState> emit,
-      ) async {
+    LoadAllMoviesEvent event,
+    Emitter<MovieState> emit,
+  ) async {
     emit(MovieLoading());
 
     try {
@@ -139,10 +142,14 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       final topRatedResult = await getTopRatedMovies(1);
       final upcomingResult = await getUpcomingMovies(1);
 
-      final nowPlaying = nowPlayingResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
-      final popular = popularResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
-      final topRated = topRatedResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
-      final upcoming = upcomingResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
+      final nowPlaying =
+          nowPlayingResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
+      final popular =
+          popularResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
+      final topRated =
+          topRatedResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
+      final upcoming =
+          upcomingResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);
 
       emit(MovieLoaded(
         nowPlayingMovies: nowPlaying,

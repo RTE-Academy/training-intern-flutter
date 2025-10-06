@@ -13,13 +13,12 @@ abstract class MovieRemoteDataSource {
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
-
   static const String _bearerToken =
       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYzYxMjE1YzdiZDEwZWY4YzUxOWQ0OGYxZjAzM2QwZCIsIm5iZiI6MTc0Nzc5OTkxMi44MDA5OTk5LCJzdWIiOiI2ODJkNGY2OGJkZDA3MTYzZGQyZjdjOWQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.-_VBCStmWn0jf4lJBDJRhCed-UmukU1z9eEQOw-2FZE';
   Map<String, dynamic> get _headers => {
-    'accept': 'application/json',
-    'Authorization': _bearerToken,
-  };
+        'accept': 'application/json',
+        'Authorization': _bearerToken,
+      };
 
   @override
   Future<List<MovieModel>> getNowPlayingMovies() async {

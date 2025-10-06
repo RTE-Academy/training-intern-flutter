@@ -12,4 +12,3 @@ class GetUpcomingMovie {
     return await repository.getUpcomingMovies(page: page);
   }
 }
-

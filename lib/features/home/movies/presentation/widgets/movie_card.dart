@@ -36,7 +36,8 @@ class MovieCard extends StatelessWidget {
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: Colors.grey[800],
-                      child: const Icon(Icons.broken_image, color: Colors.white70),
+                      child:
+                          const Icon(Icons.broken_image, color: Colors.white70),
                     );
                   },
                   loadingBuilder: (context, child, progress) {
@@ -45,7 +46,7 @@ class MovieCard extends StatelessWidget {
                       child: CircularProgressIndicator(
                         value: progress.expectedTotalBytes != null
                             ? progress.cumulativeBytesLoaded /
-                            progress.expectedTotalBytes!
+                                progress.expectedTotalBytes!
                             : null,
                         color: Colors.blue,
                       ),
@@ -54,9 +55,7 @@ class MovieCard extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 6),
-
             Flexible(
               child: Text(
                 movie.title,
