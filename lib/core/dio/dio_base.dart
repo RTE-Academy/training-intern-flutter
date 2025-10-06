@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import '../../../../injection_container.dart';
-import 'auth_remote_data_source.dart';
 
 final dio = Dio(BaseOptions(
   baseUrl: 'https://api.themoviedb.org/3',
@@ -9,4 +7,3 @@ final dio = Dio(BaseOptions(
   headers: {'Content-Type': 'application/json'},
 ));
 
-final authRemote = sl<AuthRemoteDataSource>();

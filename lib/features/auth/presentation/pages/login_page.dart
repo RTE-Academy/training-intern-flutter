@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
+import '../../../../app/presentation/pages/onboarding_page.dart';
 import '../../../../injection_container.dart';
-// import '../../../home/movies/presentation/pages/home_page.dart';
-import '../../../home/presentation/home_page.dart';
+import '../../../home/movies/presentation/pages/home_page.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -55,7 +54,7 @@ class _LoginViewState extends State<LoginView> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomePage(username: state.user.username),
+                  builder: (context) => OnboardingPage(username: state.user.username),
                 ),
               );
             }
@@ -91,7 +90,7 @@ class _LoginViewState extends State<LoginView> {
                   },
                 ),
                 if (state is AuthLoading)
-                  const Center(child: CircularProgressIndicator()),
+                  const Center(child: CircularProgressIndicator(color: Colors.blue,)),
               ],
             );
           },
