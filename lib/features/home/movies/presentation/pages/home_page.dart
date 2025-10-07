@@ -4,6 +4,7 @@ import 'package:clean_architecture_tdd_course/features/home/movies/presentation/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../injection_container.dart';
+import '../../../../detail/presentation/pages/movie_detail_page.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
@@ -73,6 +74,12 @@ class HomeView extends StatelessWidget {
                           ),
                         );
                       },
+                      onMovieTap: (movie) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => MovieDetailPage(movieId: movie.id)),
+                        );
+                      },
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -87,6 +94,12 @@ class HomeView extends StatelessWidget {
                           ),
                         );
                       },
+                      onMovieTap: (movie) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => MovieDetailPage(movieId: movie.id)),
+                        );
+                      },
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -99,6 +112,12 @@ class HomeView extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => const UpcomingSeeMorePage(),
                           ),
+                        );
+                      },
+                      onMovieTap: (movie) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => MovieDetailPage(movieId: movie.id)),
                         );
                       },
                     ),

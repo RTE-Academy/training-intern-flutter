@@ -1,7 +1,10 @@
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_toprated_movie_usecase.dart';
+import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_toprated_movies_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../injection_container.dart';
+import '../../../../detail/presentation/bloc/movie_detail_bloc.dart';
+import '../../../../detail/presentation/bloc/movie_detail_event.dart';
+import '../../../../detail/presentation/pages/movie_detail_page.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
@@ -15,7 +18,7 @@ class TopRatedSeeMorePage extends StatelessWidget {
       create: (_) => MovieBloc(
         getNowPlayingMovies: sl(),
         getPopularMovies: sl(),
-        getTopRatedMovies: sl<GetTopRatedMovie>(),
+        getTopRatedMovies: sl<GetTopRatedMoviesUsecase>(),
         getUpcomingMovies: sl(),
       )..add(const GetMoviesEvent(MovieCategory.topRated)),
       child: const TopRatedSeeMoreView(),
@@ -36,8 +39,23 @@ class _TopRatedSeeMoreViewState extends State<TopRatedSeeMoreView> {
   void _loadMore() {
     _currentPage++;
     context.read<MovieBloc>().add(
-          LoadMoreMoviesEvent(MovieCategory.topRated, _currentPage),
-        );
+      LoadMoreMoviesEvent(MovieCategory.topRated, _currentPage),
+    );
+  }
+
+  void _openMovieDetail(BuildContext context, int movieId) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => MovieDetailBloc(
+            getMovieDetail: sl(),
+            getMovieCredits: sl(),
+            getMovieVideos: sl(),
+          )..add(LoadMovieDetail(movieId)),
+          child: MovieDetailPage(movieId: movieId),
+        ),
+      ),
+    );
   }
 
   @override
@@ -76,7 +94,7 @@ class _TopRatedSeeMoreViewState extends State<TopRatedSeeMoreView> {
                   child: GridView.builder(
                     padding: const EdgeInsets.all(8),
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.65,
                       crossAxisSpacing: 8,
@@ -86,7 +104,7 @@ class _TopRatedSeeMoreViewState extends State<TopRatedSeeMoreView> {
                     itemBuilder: (context, index) {
                       final movie = movies[index];
                       return InkWell(
-                        onTap: () {},
+                        onTap: () { _openMovieDetail(context, movie.id); },
                         borderRadius: BorderRadius.circular(8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,10 +117,10 @@ class _TopRatedSeeMoreViewState extends State<TopRatedSeeMoreView> {
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) =>
                                       Container(
-                                    color: Colors.grey[800],
-                                    child: const Icon(Icons.broken_image,
-                                        color: Colors.white70),
-                                  ),
+                                        color: Colors.grey[800],
+                                        child: const Icon(Icons.broken_image,
+                                            color: Colors.white70),
+                                      ),
                                 ),
                               ),
                             ),
@@ -125,7 +143,7 @@ class _TopRatedSeeMoreViewState extends State<TopRatedSeeMoreView> {
                 Container(
                   width: double.infinity,
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
+                  const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)],
