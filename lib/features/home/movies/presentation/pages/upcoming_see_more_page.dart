@@ -1,7 +1,10 @@
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_upcoming_movie_usecase.dart';
+import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_upcoming_movies_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../injection_container.dart';
+import '../../../../detail/presentation/bloc/movie_detail_bloc.dart';
+import '../../../../detail/presentation/bloc/movie_detail_event.dart';
+import '../../../../detail/presentation/pages/movie_detail_page.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
@@ -16,7 +19,7 @@ class UpcomingSeeMorePage extends StatelessWidget {
         getNowPlayingMovies: sl(),
         getPopularMovies: sl(),
         getTopRatedMovies: sl(),
-        getUpcomingMovies: sl<GetUpcomingMovie>(),
+        getUpcomingMovies: sl<GetUpcomingMoviesUsecase>(),
       )..add(const GetMoviesEvent(MovieCategory.upcoming)),
       child: const UpCommingSeeMoreView(),
     );
@@ -36,8 +39,23 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
   void _loadMore() {
     _currentPage++;
     context.read<MovieBloc>().add(
-          LoadMoreMoviesEvent(MovieCategory.upcoming, _currentPage),
-        );
+      LoadMoreMoviesEvent(MovieCategory.upcoming, _currentPage),
+    );
+  }
+
+  void _openMovieDetail(BuildContext context, int movieId) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => MovieDetailBloc(
+            getMovieDetail: sl(),
+            getMovieCredits: sl(),
+            getMovieVideos: sl(),
+          )..add(LoadMovieDetail(movieId)),
+          child: MovieDetailPage(movieId: movieId),
+        ),
+      ),
+    );
   }
 
   @override
@@ -65,8 +83,7 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
       body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is MovieLoading && _currentPage == 1) {
-            return const Center(
-                child: CircularProgressIndicator(color: Colors.blue));
+            return const Center(child: CircularProgressIndicator(color: Colors.blue));
           } else if (state is MovieLoaded) {
             final movies = state.upcomingMovies;
 
@@ -75,8 +92,7 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(8),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.65,
                       crossAxisSpacing: 8,
@@ -86,7 +102,7 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
                     itemBuilder: (context, index) {
                       final movie = movies[index];
                       return InkWell(
-                        onTap: () {},
+                        onTap: () { _openMovieDetail(context, movie.id); },
                         borderRadius: BorderRadius.circular(8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,11 +113,9 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
                                 child: Image.network(
                                   'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Container(
+                                  errorBuilder: (context, error, stackTrace) => Container(
                                     color: Colors.grey[800],
-                                    child: const Icon(Icons.broken_image,
-                                        color: Colors.white70),
+                                    child: const Icon(Icons.broken_image, color: Colors.white70),
                                   ),
                                 ),
                               ),
@@ -124,8 +138,7 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
                 ),
                 Container(
                   width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
+                  margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)],
@@ -170,8 +183,7 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
             );
           }
 
-          return const Center(
-              child: CircularProgressIndicator(color: Colors.blue));
+          return const Center(child: CircularProgressIndicator(color: Colors.blue));
         },
       ),
     );

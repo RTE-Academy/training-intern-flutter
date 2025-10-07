@@ -3,12 +3,12 @@ import '../../../../../core/error/failures.dart';
 import '../entities/movie.dart';
 import '../repositories/movie_repository.dart';
 
-class GetTopRatedMovie {
+class GetPopularMoviesUsecase {
   final MovieRepository repository;
 
-  GetTopRatedMovie(this.repository);
+  GetPopularMoviesUsecase(this.repository);
 
   Future<Either<Failure, List<Movie>>> call(int page) async {
-    return await repository.getTopRatedMovies(page: page);
+    return await repository.getPopularMovies(page: page);
   }
 }

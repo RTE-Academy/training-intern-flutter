@@ -1,17 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/movie.dart';
-import '../../domain/usecases/get_nowplaying_movie_usecase.dart';
-import '../../domain/usecases/get_popular_movie_usecase.dart';
-import '../../domain/usecases/get_toprated_movie_usecase.dart';
-import '../../domain/usecases/get_upcoming_movie_usecase.dart';
+import '../../domain/usecases/get_nowplaying_movies_usecase.dart';
+import '../../domain/usecases/get_popular_movies_usecase.dart';
+import '../../domain/usecases/get_toprated_movies_usecase.dart';
+import '../../domain/usecases/get_upcoming_movies_usecase.dart';
 import 'movie_event.dart';
 import 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
-  final GetNowPlayingMovies getNowPlayingMovies;
-  final GetPopularMovie getPopularMovies;
-  final GetTopRatedMovie getTopRatedMovies;
-  final GetUpcomingMovie getUpcomingMovies;
+  final GetNowPlayingMoviesUsecase getNowPlayingMovies;
+  final GetPopularMoviesUsecase getPopularMovies;
+  final GetTopRatedMoviesUsecase getTopRatedMovies;
+  final GetUpcomingMoviesUsecase getUpcomingMovies;
 
   MovieBloc({
     required this.getNowPlayingMovies,
