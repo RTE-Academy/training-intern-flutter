@@ -1,22 +1,19 @@
+import 'package:clean_architecture_tdd_course/core/constant/constant_url.dart';
 import 'package:flutter/material.dart';
 
 class MoviePosterSection extends StatelessWidget {
   final String? posterPath;
-  final String? backdropPath;
 
   const MoviePosterSection({
     Key? key,
     this.posterPath,
-    this.backdropPath,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final imageUrl = posterPath != null
-        ? 'https://image.tmdb.org/t/p/original$posterPath'
-        : (backdropPath != null
-        ? 'https://image.tmdb.org/t/p/original$backdropPath'
-        : 'https://via.placeholder.com/500x750');
+        ? '$img_url_original$posterPath'
+        : null;
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.7,
@@ -25,7 +22,7 @@ class MoviePosterSection extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.network(
-            imageUrl,
+            imageUrl!,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return Container(

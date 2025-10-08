@@ -43,7 +43,6 @@ class _MovieOverviewWidgetState extends State<MovieOverviewWidget> {
               textDirection: TextDirection.ltr,
             )..layout(maxWidth: constraints.maxWidth);
 
-            // Kiểm tra xem text có bị cắt không
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted) {
                 final isOverflowing = textPainter.didExceedMaxLines;

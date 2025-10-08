@@ -1,10 +1,12 @@
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_upcoming_movies_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/constant/constant_url.dart';
 import '../../../../../injection_container.dart';
-import '../../../../detail/presentation/bloc/movie_detail_bloc.dart';
-import '../../../../detail/presentation/bloc/movie_detail_event.dart';
 import '../../../../detail/presentation/pages/movie_detail_page.dart';
+import '../../domain/usecases/get_nowplaying_movies_usecase.dart';
+import '../../domain/usecases/get_popular_movies_usecase.dart';
+import '../../domain/usecases/get_toprated_movies_usecase.dart';
+import '../../domain/usecases/get_upcoming_movies_usecase.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
@@ -19,7 +21,7 @@ class UpcomingSeeMorePage extends StatelessWidget {
         getNowPlayingMovies: sl(),
         getPopularMovies: sl(),
         getTopRatedMovies: sl(),
-        getUpcomingMovies: sl<GetUpcomingMoviesUsecase>(),
+        getUpcomingMovies: sl(),
       )..add(const GetMoviesEvent(MovieCategory.upcoming)),
       child: const UpCommingSeeMoreView(),
     );
@@ -35,25 +37,21 @@ class UpCommingSeeMoreView extends StatefulWidget {
 
 class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
   int _currentPage = 1;
+  bool _isLoadingMore = false;
 
   void _loadMore() {
+    setState(() => _isLoadingMore = true);
     _currentPage++;
     context.read<MovieBloc>().add(
-      LoadMoreMoviesEvent(MovieCategory.upcoming, _currentPage),
-    );
+          LoadMoreMoviesEvent(MovieCategory.upcoming, _currentPage),
+        );
   }
 
   void _openMovieDetail(BuildContext context, int movieId) {
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) => MovieDetailBloc(
-            getMovieDetail: sl(),
-            getMovieCredits: sl(),
-            getMovieVideos: sl(),
-          )..add(LoadMovieDetail(movieId)),
-          child: MovieDetailPage(movieId: movieId),
-        ),
+        builder: (context) => MovieDetailPage(movieId: movieId),
       ),
     );
   }
@@ -80,111 +78,135 @@ class _UpComingSeeMoreViewState extends State<UpCommingSeeMoreView> {
         ),
       ),
       backgroundColor: Colors.black,
-      body: BlocBuilder<MovieBloc, MovieState>(
-        builder: (context, state) {
-          if (state is MovieLoading && _currentPage == 1) {
-            return const Center(child: CircularProgressIndicator(color: Colors.blue));
-          } else if (state is MovieLoaded) {
-            final movies = state.upcomingMovies;
+      body: BlocListener<MovieBloc, MovieState>(
+        listener: (context, state) {
+          if (state is MovieLoaded || state is MovieFailure) {
+            setState(() => _isLoadingMore = false);
+          }
+        },
+        child: BlocBuilder<MovieBloc, MovieState>(
+          builder: (context, state) {
+            if (state is MovieLoading && _currentPage == 1) {
+              return const Center(
+                  child: CircularProgressIndicator(color: Colors.blueAccent));
+            } else if (state is MovieLoaded) {
+              final movies = state.upcomingMovies;
+              final itemCount =
+                  _isLoadingMore ? movies.length + 1 : movies.length;
 
-            return Column(
-              children: [
-                Expanded(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.all(8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                    ),
-                    itemCount: movies.length,
-                    itemBuilder: (context, index) {
-                      final movie = movies[index];
-                      return InkWell(
-                        onTap: () { _openMovieDetail(context, movie.id); },
-                        borderRadius: BorderRadius.circular(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) => Container(
-                                    color: Colors.grey[800],
-                                    child: const Icon(Icons.broken_image, color: Colors.white70),
+              return Column(
+                children: [
+                  Expanded(
+                    child: GridView.builder(
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.65,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemCount: itemCount,
+                      itemBuilder: (context, index) {
+                        if (_isLoadingMore && index == movies.length) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(
+                                  color: Colors.blueAccent, strokeWidth: 2.5),
+                            ),
+                          );
+                        }
+
+                        final movie = movies[index];
+                        return InkWell(
+                          onTap: () => _openMovieDetail(context, movie.id),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    '$img_url_w500${movie.posterPath}',
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                      color: Colors.grey[800],
+                                      child: const Icon(Icons.broken_image,
+                                          color: Colors.white70),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              movie.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
+                              const SizedBox(height: 4),
+                              Text(
+                                movie.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)]),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: _isLoadingMore ? null : _loadMore,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: _isLoadingMore
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                  color: Colors.white, strokeWidth: 2.0),
+                            )
+                          : const Text(
+                              'Load More',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.purple.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton(
-                    onPressed: _loadMore,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: const Text(
-                      'Load More',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                   ),
-                ),
-              ],
-            );
-          } else if (state is MovieFailure) {
-            return Center(
-              child: Text(
+                  const SizedBox(height: 4),
+                ],
+              );
+            } else if (state is MovieFailure) {
+              return Center(
+                  child: Text(
                 state.message,
                 style: const TextStyle(color: Colors.white),
-              ),
-            );
-          }
+              ));
+            }
 
-          return const Center(child: CircularProgressIndicator(color: Colors.blue));
-        },
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.blueAccent));
+          },
+        ),
       ),
     );
   }

@@ -39,8 +39,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: Column(
           children: [
             const Spacer(flex: 2),
-
-            // PageView
             Expanded(
               flex: 6,
               child: PageView.builder(

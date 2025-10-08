@@ -13,7 +13,6 @@ import '../widgets/watch_trailer_button.dart';
 
 class MovieDetailPage extends StatelessWidget {
   final int movieId;
-
   const MovieDetailPage({Key? key, required this.movieId}) : super(key: key);
 
   @override
@@ -69,14 +68,14 @@ class MovieDetailView extends StatelessWidget {
                     if (state.cast.isNotEmpty)
                       CastListWidget(cast: state.cast),
                     const SizedBox(height: 30),
-                    WatchTrailerButton(movieId: state.movieDetail.id)
+                    WatchTrailerButton(movieId: state.movieDetail.id),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        TopActionButtons(movieId: state.movieDetail.id),
+        TopActionButtons(),
       ],
     );
   }

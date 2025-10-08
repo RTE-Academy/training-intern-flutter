@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/constant/constant_url.dart';
 import '../../domain/entities/movie.dart';
 
 class MovieCard extends StatelessWidget {
@@ -13,9 +14,9 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl = movie.posterPath.isNotEmpty
-        ? "https://image.tmdb.org/t/p/w500${movie.posterPath}"
-        : "https://via.placeholder.com/150";
+    final String? imageUrl = movie.posterPath.isNotEmpty
+        ? "$img_url_w500${movie.posterPath}"
+        : null;
 
     return InkWell(
       onTap: onTap,
@@ -31,7 +32,7 @@ class MovieCard extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 2 / 3,
                 child: Image.network(
-                  imageUrl,
+                  imageUrl!,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(

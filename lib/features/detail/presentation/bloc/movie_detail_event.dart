@@ -25,15 +25,6 @@ class LoadMovieCredits extends MovieDetailEvent {
   List<Object?> get props => [movieId];
 }
 
-class ToggleFavorite extends MovieDetailEvent {
-  final int movieId;
-
-  const ToggleFavorite(this.movieId);
-
-  @override
-  List<Object?> get props => [movieId];
-}
-
 class WatchMovie extends MovieDetailEvent {
   final int movieId;
 

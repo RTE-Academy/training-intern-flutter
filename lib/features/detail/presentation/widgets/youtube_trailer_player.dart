@@ -1,55 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-void showTrailerDialog(BuildContext context, String trailerKey) {
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (_) {
-      return Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(16),
-        child: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controller: YoutubePlayerController(
-              initialVideoId: trailerKey,
-              flags: const YoutubePlayerFlags(
-                autoPlay: true,
-                mute: false,
-                enableCaption: false,
-                controlsVisibleAtStart: true,
-                useHybridComposition: true,
-              ),
-            ),
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.redAccent,
+class TrailerDialog extends StatefulWidget {
+  final YoutubePlayerController controller;
+  const TrailerDialog({super.key, required this.controller});
+
+  @override
+  State<TrailerDialog> createState() => _TrailerDialogState();
+}
+
+class _TrailerDialogState extends State<TrailerDialog> {
+  @override
+  void dispose() {
+    widget.controller.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.black,
+      insetPadding: const EdgeInsets.all(16),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: YoutubePlayer(controller: widget.controller),
           ),
-          builder: (context, player) {
-            return Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Container(
-                      color: Colors.black,
-                      child: player,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      );
-    },
-  );
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white, size: 28),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

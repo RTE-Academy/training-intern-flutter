@@ -30,7 +30,6 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       (failure) => emit(const MovieDetailError("Failed to load movie details")),
       (movieDetail) {
         emit(MovieDetailLoaded(movieDetail: movieDetail));
-
         add(LoadMovieCredits(event.movieId));
       },
     );
@@ -42,7 +41,8 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       final currentState = state as MovieDetailLoaded;
       final result = await getMovieCredits(event.movieId);
       result.fold(
-        (failure) => emit(currentState.copyWith(cast: [])),
+        (failure) =>
+            emit(const MovieDetailError("Failed to load movie credits")),
         (castList) => emit(currentState.copyWith(cast: castList)),
       );
     }
@@ -53,18 +53,15 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
     Emitter<MovieDetailState> emit,
   ) async {
     if (state is! MovieDetailLoaded) return;
-
     final currentState = state as MovieDetailLoaded;
+
     final result = await getMovieVideos(event.movieId);
 
     result.fold(
-      (failure) {
-        emit(MovieDetailError("Failed to load trailer"));
-      },
+      (failure) => emit(MovieDetailError("Failed to load trailer")),
       (trailerKey) {
         if (trailerKey != null && trailerKey.isNotEmpty) {
-          final trailerUrl = 'https://www.youtube.com/watch?v=$trailerKey';
-          emit(currentState.copyWith(trailerUrl: trailerUrl));
+          emit(currentState.copyWith(trailerKey: trailerKey));
         } else {
           emit(MovieDetailError("Trailer not available"));
         }

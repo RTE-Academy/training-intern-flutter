@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constant/constant_url.dart';
 import '../../domain/entities/cast.dart';
 
 class CastItemWidget extends StatelessWidget {
@@ -25,7 +26,7 @@ class CastItemWidget extends StatelessWidget {
             radius: 35,
             backgroundImage: cast.profilePath != null
                 ? NetworkImage(
-                'https://image.tmdb.org/t/p/w185${cast.profilePath}')
+                '$img_url_w185${cast.profilePath}')
                 : null,
             backgroundColor: Colors.grey.shade800,
             child: cast.profilePath == null

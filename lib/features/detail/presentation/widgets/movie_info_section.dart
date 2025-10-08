@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/movie_detail.dart';
-import 'format_date.dart';
+import '../../../../core/util/format_date.dart';
 
 class MovieInfoSection extends StatelessWidget {
   final MovieDetail movieDetail;

@@ -1,6 +1,5 @@
 import 'package:clean_architecture_tdd_course/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
-
 import '../../domain/entities/cast.dart';
 import '../../domain/entities/movie_detail.dart';
 import '../../domain/repositories/movie_detail_repository.dart';
@@ -12,9 +11,9 @@ class MovieDetailRepositoryImpl implements MovieDetailRepository {
   MovieDetailRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, MovieDetail>> getMovieDetail({required int movieId}) async {
+  Future<Either<Failure, MovieDetail>> getMovieDetail(int movieId) async {
     try {
-      final detail = await remoteDataSource.getMovieDetail(movieId: movieId);
+      final detail = await remoteDataSource.getMovieDetail(movieId);
       return Right(detail);
     } catch (e) {
       return Left(ServerFailure());
@@ -22,19 +21,20 @@ class MovieDetailRepositoryImpl implements MovieDetailRepository {
   }
 
   @override
-  Future<Either<Failure, List<Cast>>> getMovieCredits({required int movieId}) async {
+  Future<Either<Failure, List<Cast>>> getMovieCredits(int movieId) async {
     try {
-      final result = await remoteDataSource.getMovieCredits(movieId: movieId);
+      final result = await remoteDataSource.getMovieCredits(movieId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure());
     }
   }
 
-  @override@override
+  @override
   Future<Either<Failure, String?>> getMovieTrailer(int movieId) async {
     try {
-      final trailerKey = await remoteDataSource.getMovieTrailer(movieId: movieId);
+      final trailerKey = await remoteDataSource.getMovieTrailer(movieId);
+      print(trailerKey);
       return Right(trailerKey);
     } catch (e) {
       return Left(ServerFailure());

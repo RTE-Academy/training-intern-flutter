@@ -5,13 +5,6 @@ import '../bloc/movie_detail_event.dart';
 import '../bloc/movie_detail_state.dart';
 
 class TopActionButtons extends StatelessWidget {
-  final int movieId;
-
-  const TopActionButtons({
-    Key? key,
-    required this.movieId,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(

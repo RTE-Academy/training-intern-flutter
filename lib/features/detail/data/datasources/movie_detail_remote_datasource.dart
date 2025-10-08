@@ -6,21 +6,21 @@ import '../model/cast_model.dart';
 import '../model/movie_detail_model.dart';
 
 abstract class MovieDetailRemoteDataSource {
-  Future<MovieDetailModel> getMovieDetail({required int movieId});
-  Future<List<CastModel>> getMovieCredits({required int movieId});
-  Future<String?> getMovieTrailer({required int movieId});
+  Future<MovieDetailModel> getMovieDetail(int movieId);
+  Future<List<CastModel>> getMovieCredits(int movieId);
+  Future<String?> getMovieTrailer(int movieId);
 }
 
 class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
   static const String _bearerToken =
       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYzYxMjE1YzdiZDEwZWY4YzUxOWQ0OGYxZjAzM2QwZCIsIm5iZiI6MTc0Nzc5OTkxMi44MDA5OTk5LCJzdWIiOiI2ODJkNGY2OGJkZDA3MTYzZGQyZjdjOWQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.-_VBCStmWn0jf4lJBDJRhCed-UmukU1z9eEQOw-2FZE';
   Map<String, dynamic> get _headers => {
-    'accept': 'application/json',
-    'Authorization': _bearerToken,
-  };
+        'accept': 'application/json',
+        'Authorization': _bearerToken,
+      };
 
   @override
-  Future<MovieDetailModel> getMovieDetail({required int movieId}) async {
+  Future<MovieDetailModel> getMovieDetail(int movieId) async {
     try {
       final response = await dio.get(
         '$movie/$movieId',
@@ -30,7 +30,7 @@ class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
         options: Options(headers: _headers),
       );
 
-      final trailerKey = await getMovieTrailer(movieId: movieId);
+      final trailerKey = await getMovieTrailer(movieId);
 
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
@@ -44,7 +44,7 @@ class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
   }
 
   @override
-  Future<List<CastModel>> getMovieCredits({required int movieId}) async {
+  Future<List<CastModel>> getMovieCredits(int movieId) async {
     try {
       final response = await dio.get(
         '$movie/$movieId/credits',
@@ -67,7 +67,7 @@ class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
   }
 
   @override
-  Future<String?> getMovieTrailer({required int movieId}) async {
+  Future<String?> getMovieTrailer(int movieId) async {
     try {
       final response = await dio.get(
         '$movie/$movieId/videos',
@@ -76,27 +76,25 @@ class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
 
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
-        final results = (data['results'] as List<dynamic>?)
-            ?.cast<Map<String, dynamic>>() ??
-            [];
+        final results =
+            (data['results'] as List<dynamic>?)?.cast<Map<String, dynamic>>() ??
+                [];
 
         final trailer = results.firstWhere(
-              (video) =>
-          video['type'] == 'Trailer' &&
+          (video) =>
+              video['type'] == 'Trailer' &&
               video['site'] == 'YouTube' &&
               video['official'] == true,
           orElse: () => <String, dynamic>{},
         );
 
         final trailerKey = trailer['key'] as String?;
-
         return trailerKey;
       } else {
         throw ServerException();
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       throw ServerException();
     }
   }
 }
-

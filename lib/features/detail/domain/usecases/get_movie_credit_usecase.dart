@@ -9,6 +9,6 @@ class GetMovieCreditsUsecase {
   GetMovieCreditsUsecase(this.repository);
 
   Future<Either<Failure, List<Cast>>> call(int movieId) async {
-    return await repository.getMovieCredits(movieId: movieId);
+    return await repository.getMovieCredits(movieId);
   }
 }

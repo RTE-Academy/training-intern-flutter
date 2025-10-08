@@ -16,32 +16,28 @@ class MovieDetailLoading extends MovieDetailState {}
 class MovieDetailLoaded extends MovieDetailState {
   final MovieDetail movieDetail;
   final List<Cast> cast;
-  final bool isFavorite;
-  final String? trailerUrl;
+  final String? trailerKey;
 
   const MovieDetailLoaded({
     required this.movieDetail,
     this.cast = const [],
-    this.isFavorite = false,
-    this.trailerUrl,
+    this.trailerKey,
   });
 
   MovieDetailLoaded copyWith({
     MovieDetail? movieDetail,
     List<Cast>? cast,
-    bool? isFavorite,
-    String? trailerUrl,
+    String? trailerKey,
   }) {
     return MovieDetailLoaded(
       movieDetail: movieDetail ?? this.movieDetail,
       cast: cast ?? this.cast,
-      isFavorite: isFavorite ?? this.isFavorite,
-      trailerUrl: trailerUrl ?? this.trailerUrl,
+      trailerKey: trailerKey ?? this.trailerKey,
     );
   }
 
   @override
-  List<Object?> get props => [movieDetail, cast, isFavorite, trailerUrl];
+  List<Object?> get props => [movieDetail, cast, trailerKey];
 }
 
 class MovieDetailError extends MovieDetailState {
