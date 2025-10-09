@@ -8,16 +8,16 @@ import 'movie_event.dart';
 import 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
-  final GetNowPlayingMoviesUsecase getNowPlayingMovies;
-  final GetPopularMoviesUsecase getPopularMovies;
-  final GetTopRatedMoviesUsecase getTopRatedMovies;
-  final GetUpcomingMoviesUsecase getUpcomingMovies;
+  final GetNowPlayingMoviesUsecase getNowPlayingMoviesUsecase;
+  final GetPopularMoviesUsecase getPopularMoviesUsecase;
+  final GetTopRatedMoviesUsecase getTopRatedMoviesUsecase;
+  final GetUpcomingMoviesUsecase getUpcomingMoviesUsecase;
 
   MovieBloc({
-    required this.getNowPlayingMovies,
-    required this.getPopularMovies,
-    required this.getTopRatedMovies,
-    required this.getUpcomingMovies,
+    required this.getNowPlayingMoviesUsecase,
+    required this.getPopularMoviesUsecase,
+    required this.getTopRatedMoviesUsecase,
+    required this.getUpcomingMoviesUsecase,
   }) : super(MovieInitial()) {
     on<GetMoviesEvent>(_onGetMovies);
     on<LoadMoreMoviesEvent>(_onLoadMoreMovies);
@@ -33,10 +33,10 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     }
 
     final result = switch (event.category) {
-      MovieCategory.nowPlaying => await getNowPlayingMovies(),
-      MovieCategory.popular => await getPopularMovies(event.page),
-      MovieCategory.topRated => await getTopRatedMovies(event.page),
-      MovieCategory.upcoming => await getUpcomingMovies(event.page),
+      MovieCategory.nowPlaying => await getNowPlayingMoviesUsecase(),
+      MovieCategory.popular => await getPopularMoviesUsecase(event.page),
+      MovieCategory.topRated => await getTopRatedMoviesUsecase(event.page),
+      MovieCategory.upcoming => await getUpcomingMoviesUsecase(event.page),
     };
 
     result.fold(
@@ -92,7 +92,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
     switch (event.category) {
       case MovieCategory.popular:
-        final result = await getPopularMovies(event.nextPage);
+        final result = await getPopularMoviesUsecase(event.nextPage);
         result.fold(
           (failure) => emit(MovieFailure("Failed to load more popular movies")),
           (movies) {
@@ -103,7 +103,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         break;
 
       case MovieCategory.topRated:
-        final result = await getTopRatedMovies(event.nextPage);
+        final result = await getTopRatedMoviesUsecase(event.nextPage);
         result.fold(
           (failure) =>
               emit(MovieFailure("Failed to load more top-rated movies")),
@@ -115,7 +115,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         break;
 
       case MovieCategory.upcoming:
-        final result = await getUpcomingMovies(event.nextPage);
+        final result = await getUpcomingMoviesUsecase(event.nextPage);
         result.fold(
           (failure) =>
               emit(MovieFailure("Failed to load more upcoming movies")),
@@ -137,10 +137,10 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     emit(MovieLoading());
 
     try {
-      final nowPlayingResult = await getNowPlayingMovies();
-      final popularResult = await getPopularMovies(1);
-      final topRatedResult = await getTopRatedMovies(1);
-      final upcomingResult = await getUpcomingMovies(1);
+      final nowPlayingResult = await getNowPlayingMoviesUsecase();
+      final popularResult = await getPopularMoviesUsecase(1);
+      final topRatedResult = await getTopRatedMoviesUsecase(1);
+      final upcomingResult = await getUpcomingMoviesUsecase(1);
 
       final nowPlaying =
           nowPlayingResult.fold<List<Movie>>((l) => <Movie>[], (r) => r);

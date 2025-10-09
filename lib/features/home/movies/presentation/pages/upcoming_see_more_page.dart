@@ -3,10 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constant/constant_url.dart';
 import '../../../../../injection_container.dart';
 import '../../../../detail/presentation/pages/movie_detail_page.dart';
-import '../../domain/usecases/get_nowplaying_movies_usecase.dart';
-import '../../domain/usecases/get_popular_movies_usecase.dart';
-import '../../domain/usecases/get_toprated_movies_usecase.dart';
-import '../../domain/usecases/get_upcoming_movies_usecase.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
@@ -17,12 +13,7 @@ class UpcomingSeeMorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MovieBloc>(
-      create: (_) => MovieBloc(
-        getNowPlayingMovies: sl(),
-        getPopularMovies: sl(),
-        getTopRatedMovies: sl(),
-        getUpcomingMovies: sl(),
-      )..add(const GetMoviesEvent(MovieCategory.upcoming)),
+      create: (_) => sl<MovieBloc>(),
       child: const UpCommingSeeMoreView(),
     );
   }

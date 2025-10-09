@@ -26,6 +26,7 @@ import 'features/home/movies/domain/usecases/get_popular_movies_usecase.dart';
 import 'features/home/movies/domain/usecases/get_toprated_movies_usecase.dart';
 import 'features/home/movies/domain/usecases/get_upcoming_movies_usecase.dart';
 import 'features/home/movies/presentation/bloc/movie_bloc.dart';
+import 'features/home/movies/presentation/bloc/movie_event.dart';
 import 'features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
 import 'features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
@@ -54,12 +55,15 @@ Future<void> init() async {
 
   //Bloc_Movie
   sl.registerFactory(() => MovieBloc(
-      getNowPlayingMovies: sl(),
-      getPopularMovies: sl(),
-      getTopRatedMovies: sl(),
-      getUpcomingMovies: sl(),
-    )
-  );
+    getNowPlayingMoviesUsecase: sl(),
+    getPopularMoviesUsecase: sl(),
+    getTopRatedMoviesUsecase: sl(),
+    getUpcomingMoviesUsecase: sl(),
+  )
+    ..add(const LoadAllMoviesEvent())
+    ..add(const GetMoviesEvent(MovieCategory.popular))
+    ..add(const GetMoviesEvent(MovieCategory.topRated))
+    ..add(const GetMoviesEvent(MovieCategory.upcoming)));
 
   //Bloc_Movie_Detail
   sl.registerFactory(() => MovieDetailBloc(

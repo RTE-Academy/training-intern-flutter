@@ -25,12 +25,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MovieBloc(
-        getNowPlayingMovies: sl(),
-        getPopularMovies: sl(),
-        getTopRatedMovies: sl(),
-        getUpcomingMovies: sl(),
-      )..add(const LoadAllMoviesEvent()),
+      create: (_) => sl<MovieBloc>(),
       child: HomeView(username: username),
     );
   }

@@ -38,7 +38,7 @@ class MovieInfoSection extends StatelessWidget {
   Widget _buildReleaseInfo() {
     final releaseDate = movieDetail.releaseDate;
     final runtime = movieDetail.runtime;
-    final runtimeText = runtime != null ? '$runtime min' : '';
+    final runtimeText = '$runtime min';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

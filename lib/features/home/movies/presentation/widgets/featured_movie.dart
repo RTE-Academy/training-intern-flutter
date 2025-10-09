@@ -80,9 +80,7 @@ class _FeaturedMovieState extends State<FeaturedMovie> {
                       fit: StackFit.expand,
                       children: [
                         Image.network(
-                          movie.backdropPath != null
-                              ? '$img_url_w500${movie.backdropPath}'
-                              : '',
+                          '$img_url_w500${movie.backdropPath}',
                           fit: BoxFit.cover,
                         ),
                         Container(

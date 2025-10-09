@@ -13,12 +13,7 @@ class PopularSeeMorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MovieBloc>(
-      create: (_) => MovieBloc(
-        getNowPlayingMovies: sl(),
-        getPopularMovies: sl(),
-        getTopRatedMovies: sl(),
-        getUpcomingMovies: sl(),
-      )..add(const GetMoviesEvent(MovieCategory.popular)),
+      create: (_) => sl<MovieBloc>(),
       child: const PopularSeeMoreView(),
     );
   }

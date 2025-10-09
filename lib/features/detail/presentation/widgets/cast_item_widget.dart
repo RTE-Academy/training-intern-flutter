@@ -24,18 +24,10 @@ class CastItemWidget extends StatelessWidget {
           ),
           child: CircleAvatar(
             radius: 35,
-            backgroundImage: cast.profilePath != null
-                ? NetworkImage(
-                '$img_url_w185${cast.profilePath}')
-                : null,
+            backgroundImage: NetworkImage(
+                '$img_url_w185${cast.profilePath}'),
             backgroundColor: Colors.grey.shade800,
-            child: cast.profilePath == null
-                ? Icon(
-              Icons.person,
-              color: Colors.grey.shade600,
-              size: 35,
-            )
-                : null,
+            child: null,
           ),
         ),
         const SizedBox(height: 8),

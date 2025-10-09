@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/movie_detail_bloc.dart';
-import '../bloc/movie_detail_event.dart';
-import '../bloc/movie_detail_state.dart';
 
 class TopActionButtons extends StatelessWidget {
   @override
