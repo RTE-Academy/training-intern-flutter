@@ -1,4 +1,4 @@
-# TDD Clean Architecture for Flutter
+# Traning Flutter
 Flutter version: 3.24.3
 ## Training
 1. [Introduction to Flutter & Dart](training/1_dart.md)
