@@ -1,3 +1,5 @@
+[← Back to Training Plan](../README.md)
+
 # App Architecture & Dependency Injection
 
 ## Overview<a id="overview"></a>
@@ -177,3 +179,5 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 2. Set up dependency injection for them using `get_it`.
 3. Connect them in a `TodoBloc` that loads todos on app startup.
 4. Print todos in the console or display them in a simple UI.
+
+[**Next Module:** Localization (Multi-language) - intl package, language switch, JSON localization.](8_flutter_localization_training.md)

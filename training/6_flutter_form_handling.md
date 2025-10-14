@@ -1,3 +1,5 @@
+[← Back to Training Plan](../README.md)
+
 # Flutter Form Handling – TextFormField, Validation, and Bloc Integration
 
 ## Introduction<a id="introduction"></a>
@@ -228,3 +230,5 @@ By the end of this lesson, you should be able to:
 - Implement Bloc-based form handling for maintainable and scalable apps.
 
 With this knowledge, you can now handle any type of user form in Flutter efficiently and cleanly!
+
+[**Next Module:** App Architecture & Dependency Injection - Clean Architecture, Repository & UseCase, get_it.](7_flutter_app_architecture.md)

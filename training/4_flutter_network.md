@@ -1,3 +1,5 @@
+[← Back to Training Plan](../README.md)
+
 # API Integration with Dio - GET/POST Requests, JSON Parsing & Repository Pattern
 
 ## Introduction to Dio
@@ -203,3 +205,5 @@ it using Flutter widgets.
 
 With these concepts, you can now confidently connect your Flutter apps to RESTful APIs in
 a structured and maintainable way.
+
+[**Next Module:** State Management (Bloc) - Event–Bloc–State cycle, flutter_bloc usage](5_flutter_bloc_state_management.md)

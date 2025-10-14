@@ -340,3 +340,5 @@ Try to build a small project that uses:
 *   Two languages (localization)
 
 Built for mentors & graduates — copy, adapt, and use in workshops. Happy coding! 🚀
+
+[**Next Module:** Flutter UI Basics - Widgets, layout, theming, responsive design](2_flutter_ui.md)

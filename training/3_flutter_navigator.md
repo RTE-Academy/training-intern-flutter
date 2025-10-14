@@ -1,3 +1,5 @@
+[← Back to Training Plan](../README.md)
+
 # Flutter Navigation 1.0, Data Passing & Routing Setup
 
 Step-by-step learning guide for beginners
@@ -160,3 +162,5 @@ class DetailScreen extends StatelessWidget {
 - Use named routes for better maintainability.
 - Always handle null-safety when receiving data via `ModalRoute`.
 - Prefer **Navigator 2.0** for apps requiring deep linking or complex navigation flows.
+
+[**Next Module:** API Integration with Dio - GET/POST requests, JSON parsing, repository pattern](4_flutter_network.md)

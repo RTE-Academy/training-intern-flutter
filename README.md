@@ -1,6 +1,6 @@
-# Traning Flutter
-Flutter version: 3.24.3
-## Training
+# Training Flutter
+Flutter 3.24.3
+## Plan Training
 1. [Introduction to Flutter & Dart](training/1_dart.md)
     - [Overview](training/1_dart.md#overview)
     - [Dart Basics (Syntax & Core Concepts)](training/1_dart.md#dart-basics)
@@ -119,3 +119,47 @@ Flutter version: 3.24.3
         - **UI/UX Assessment:** The application's user interface and user experience will be evaluated for its design, usability, and responsiveness.
         - **Technical Understanding:** Interns will be assessed on their understanding of Flutter, the project's architecture, and their ability to explain and resolve issues found in the source code.
         - **Code Quality:** Adherence to Clean Architecture, best practices, and overall code readability.
+---
+#### **(Tiếng Việt)**
+10. **Phát triển Dự án Cá nhân: Ứng dụng Phim với TMDb**
+    - **Mục tiêu:** Xây dựng một ứng dụng Flutter hoàn chỉnh, sẵn sàng cho sản xuất bằng cách áp dụng tất cả các khái niệm đã học trong chương trình đào tạo (Module 1-9). Dự án này sẽ kiểm tra khả năng của bạn trong việc tích hợp các công nghệ khác nhau vào một ứng dụng gắn kết, có cấu trúc tốt.
+    - **Yêu cầu Cốt lõi:**
+        - **Kiến trúc:** Triển khai Kiến trúc Sạch (Clean Architecture), tách biệt rõ ràng các tầng Presentation, Domain, và Data.
+        - **Quản lý Trạng thái:** Sử dụng Bloc pattern cho tất cả việc quản lý trạng thái.
+        - **Tích hợp API:** Lấy tất cả dữ liệu phim từ API của The Movie Database (TMDb) bằng cách sử dụng package `dio`.
+        - **Tiêm phụ thuộc (Dependency Injection):** Quản lý tất cả các phụ thuộc bằng service locator `get_it`.
+        - **Lưu trữ Dữ liệu:** Sử dụng `shared_preferences` hoặc `hive` để lưu các tùy chọn của người dùng như theme và ngôn ngữ.
+        - **Đa ngôn ngữ (Localization):** Triển khai hỗ trợ đa ngôn ngữ cho ít nhất hai ngôn ngữ (ví dụ: tiếng Anh và tiếng Việt).
+    - **Bộ tính năng:**
+        - **Danh sách Phim:**
+            - Một màn hình chính hiển thị nhiều danh sách cuộn ngang cho các mục "Now Playing," "Popular," "Top Rated," và "Upcoming".
+            - Triển khai phân trang hoặc cuộn vô hạn cho các danh sách phim theo chiều dọc.
+        - **Chi tiết Phim:**
+            - Một màn hình chi tiết hiển thị thông tin toàn diện cho một bộ phim được chọn, bao gồm poster, backdrop, tiêu đề, tổng quan, đánh giá của người dùng, ngày phát hành và danh sách diễn viên.
+        - **Tìm kiếm:**
+            - Một màn hình tìm kiếm cho phép người dùng tìm phim theo tiêu đề.
+        - **Cài đặt:**
+            - Một màn hình cài đặt nơi người dùng có thể chuyển đổi giữa theme sáng/tối và thay đổi ngôn ngữ ứng dụng. Tất cả các tùy chọn phải được lưu trữ cục bộ.
+    - **Thông số kỹ thuật API:**
+        - Bạn phải sử dụng **API của The Movie Database (TMDb)**.
+        - Đăng ký một khóa API miễn phí tại [themoviedb.org](https://www.themoviedb.org/signup).
+        - Các endpoint chính cần sử dụng: `/movie/now_playing`, `/movie/popular`, `/movie/top_rated`, `/movie/upcoming`, `/movie/{movie_id}`, `/search/movie`.
+    - **Tính năng (Tùy chọn):**
+        - **Yêu thích:** Cho phép người dùng đánh dấu các bộ phim là yêu thích và xem chúng trong một danh sách riêng. Lưu trữ danh sách yêu thích cục bộ.
+        - **Hoạt ảnh:** Thêm các hoạt ảnh và chuyển tiếp tinh tế để cải thiện trải nghiệm người dùng.
+        - **Lưu trữ Offline:** Cache dữ liệu API bằng `hive` để cho phép duyệt web cơ bản khi không có mạng.
+    - **Tiêu chí Đánh giá:**
+        - **Chất lượng Code:** Khả năng đọc, cấu trúc và tuân thủ các nguyên tắc của Kiến trúc Sạch.
+        - **Chức năng:** Tất cả các tính năng cốt lõi được triển khai và hoạt động chính xác.
+        - **Quản lý Trạng thái:** Sử dụng Bloc pattern một cách chính xác và hiệu quả.
+        - **UI/UX:** Giao diện người dùng sạch sẽ, đáp ứng và trực quan.
+        - **Kiểm soát Phiên bản:** Các commit Git nhất quán và có ý nghĩa.
+11. **Thuyết trình & Đánh giá**
+    - **Mục tiêu:** Để đánh giá sự tiến bộ của thực tập sinh, chất lượng code và sự hiểu biết về các khái niệm được áp dụng trong dự án cuối cùng. Quá trình này đảm bảo phản hồi liên tục và đầu ra chất lượng cao.
+    - **Quy trình:**
+        - **Đánh giá Pull Request (PR):** Tất cả các tính năng mới phải được gửi dưới dạng pull request đến nhánh `dev`. Mỗi PR sẽ được mentor xem xét kỹ lưỡng trước khi được hợp nhất. Đây là một bước quan trọng để duy trì chất lượng code.
+        - **Đánh giá Định kỳ:** Các buổi đánh giá sẽ được tổ chức một hoặc hai lần một tuần.
+    - **Tiêu chí Đánh giá:**
+        - **Đánh giá UI/UX:** Giao diện người dùng và trải nghiệm người dùng của ứng dụng sẽ được đánh giá về thiết kế, tính khả dụng và khả năng đáp ứng.
+        - **Hiểu biết Kỹ thuật:** Thực tập sinh sẽ được đánh giá về sự hiểu biết của họ về Flutter, kiến trúc của dự án và khả năng giải thích và giải quyết các vấn đề được tìm thấy trong mã nguồn.
+        - **Chất lượng Code:** Tuân thủ Clean Architecture, các phương pháp hay nhất và khả năng đọc code tổng thể.

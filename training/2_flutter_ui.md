@@ -217,15 +217,4 @@ class ResponsiveHome extends StatelessWidget {
 }
 ```
 
-> **Tip:** Combine layout widgets with theme-aware colors to create beautiful, consistent, and adaptive UIs.
-
-<a id="resources"></a>
-## 6. Next Steps & Resources
-
-*   🧱 Learn advanced layout: `GridView`, `CustomScrollView`, `SliverList`
-*   🎨 Deep dive into **Material 3 (M3)** and **ColorScheme**
-*   📱 Explore **responsive_framework** and **flutter_screenutil**
-*   💡 Experiment with adaptive UI using `AdaptiveLayout` (Material 3)
-
----
-© Flutter Mentor Training — Widgets, Layout & Theming. Built for new Flutter developers 🚀
+[**Next Module:** Navigation & Routing - Navigator 1.0, data passing, routing setup](3_flutter_navigator.md)

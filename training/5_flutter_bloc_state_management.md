@@ -1,3 +1,5 @@
+[← Back to Training Plan](../README.md)
+
 # State Management (Bloc)
 
 ## Overview<a id="overview"></a>
@@ -183,3 +185,5 @@ lib/
 1. Create a `LoginBloc` with events: `LoginSubmitted` and states: `LoginLoading`, `LoginSuccess`, `LoginFailure`.
 2. Implement BlocBuilder to show loading and success states in the UI.
 3. Add form validation using Bloc events and states.
+
+[**Next Module:** Form Handling - TextFormField, validation, Bloc form handling](6_flutter_form_handling.md)

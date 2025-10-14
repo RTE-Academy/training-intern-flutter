@@ -1,3 +1,5 @@
+[← Back to Training Plan](../README.md)
+
 # Flutter Training: Localization (Multi-language)
 
 ## Overview<a id="overview"></a>
@@ -235,4 +237,4 @@ print(formattedDate); // 6 tháng 10, 2025
 
 ---
 
-**Next Module:** Theming and Responsive Design – Understanding color schemes, typography, and layout adaptation.
+[**Next Module:** Persistence & Preferences - SharedPreferences/Hive, theme & language storage.](9_flutter_persistence_preferences.md)
