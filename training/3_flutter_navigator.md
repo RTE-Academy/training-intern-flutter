@@ -163,4 +163,4 @@ class DetailScreen extends StatelessWidget {
 - Always handle null-safety when receiving data via `ModalRoute`.
 - Prefer **Navigator 2.0** for apps requiring deep linking or complex navigation flows.
 
-[**Next Module:** API Integration with Dio - GET/POST requests, JSON parsing, repository pattern](4_flutter_network.md)
+[**Next Module:** Flutter Navigation 2.0 introduces a declarative way to handle app navigation.](3_1_flutter_navigation_2.md)
