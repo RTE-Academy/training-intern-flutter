@@ -6,4 +6,3 @@ final dio = Dio(BaseOptions(
   receiveTimeout: const Duration(seconds: 3),
   headers: {'Content-Type': 'application/json'},
 ));
-

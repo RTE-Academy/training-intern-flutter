@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/constant/constant_url.dart';
 import '../../domain/entities/movie.dart';
 
 class MovieCard extends StatelessWidget {
@@ -13,9 +14,9 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl = movie.posterPath.isNotEmpty
-        ? "https://image.tmdb.org/t/p/w500${movie.posterPath}"
-        : "https://via.placeholder.com/150";
+    final String? imageUrl = movie.posterPath.isNotEmpty
+        ? "$img_url_w500${movie.posterPath}"
+        : null;
 
     return InkWell(
       onTap: onTap,
@@ -31,12 +32,13 @@ class MovieCard extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 2 / 3,
                 child: Image.network(
-                  imageUrl,
+                  imageUrl!,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: Colors.grey[800],
-                      child: const Icon(Icons.broken_image, color: Colors.white70),
+                      child:
+                          const Icon(Icons.broken_image, color: Colors.white70),
                     );
                   },
                   loadingBuilder: (context, child, progress) {
@@ -45,7 +47,7 @@ class MovieCard extends StatelessWidget {
                       child: CircularProgressIndicator(
                         value: progress.expectedTotalBytes != null
                             ? progress.cumulativeBytesLoaded /
-                            progress.expectedTotalBytes!
+                                progress.expectedTotalBytes!
                             : null,
                         color: Colors.blue,
                       ),
@@ -54,9 +56,7 @@ class MovieCard extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 6),
-
             Flexible(
               child: Text(
                 movie.title,

@@ -15,7 +15,6 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-
   static const String _apiKey = 'bc61215c7bd10ef8c519d48f1f033d0d';
 
   @override

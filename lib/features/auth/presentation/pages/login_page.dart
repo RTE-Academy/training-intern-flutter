@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/presentation/pages/onboarding_page.dart';
 import '../../../../injection_container.dart';
-import '../../../home/movies/presentation/pages/home_page.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -54,7 +53,8 @@ class _LoginViewState extends State<LoginView> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OnboardingPage(username: state.user.username),
+                  builder: (context) =>
+                      OnboardingPage(username: state.user.username),
                 ),
               );
             }
@@ -81,16 +81,19 @@ class _LoginViewState extends State<LoginView> {
                   onLogin: () {
                     if (_formKey.currentState!.validate()) {
                       context.read<AuthBloc>().add(
-                        LoginSubmitted(
-                          username: _usernameController.text.trim(),
-                          password: _passwordController.text.trim(),
-                        ),
-                      );
+                            LoginSubmitted(
+                              username: _usernameController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            ),
+                          );
                     }
                   },
                 ),
                 if (state is AuthLoading)
-                  const Center(child: CircularProgressIndicator(color: Colors.blue,)),
+                  const Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.blue,
+                  )),
               ],
             );
           },

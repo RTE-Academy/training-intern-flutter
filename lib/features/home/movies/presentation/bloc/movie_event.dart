@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum MovieCategory { nowPlaying, popular, topRated, upcoming}
+enum MovieCategory { nowPlaying, popular, topRated, upcoming }
 
 abstract class MovieEvent extends Equatable {
   const MovieEvent();
@@ -35,4 +35,3 @@ class LoadMoreMoviesEvent extends MovieEvent {
   @override
   List<Object?> get props => [category, nextPage];
 }
-
