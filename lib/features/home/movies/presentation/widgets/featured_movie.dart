@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clean_architecture_tdd_course/core/constant/constant_url.dart';
 import 'package:flutter/material.dart';
 import '../../domain/entities/movie.dart';
 
@@ -79,9 +80,7 @@ class _FeaturedMovieState extends State<FeaturedMovie> {
                       fit: StackFit.expand,
                       children: [
                         Image.network(
-                          movie.backdropPath != null
-                              ? 'https://image.tmdb.org/t/p/w500${movie.backdropPath}'
-                              : 'https://via.placeholder.com/500x750',
+                          '$img_url_w500${movie.backdropPath}',
                           fit: BoxFit.cover,
                         ),
                         Container(
@@ -104,45 +103,14 @@ class _FeaturedMovieState extends State<FeaturedMovie> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                movie.title ?? 'Unknown',
+                                movie.title,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              // const SizedBox(height: 4),
-                              // const Text(
-                              //   "Marvel Studios", // hoặc movie.productionCompany nếu có
-                              //   style: TextStyle(
-                              //     color: Colors.white70,
-                              //     fontSize: 14,
-                              //   ),
-                              // ),
                               const SizedBox(height: 8),
-                              // Row(
-                              //   children: [
-                              //     ...List.generate(
-                              //       5,
-                              //           (starIndex) => Icon(
-                              //         Icons.star,
-                              //         color: starIndex <
-                              //             ((movie.voteAverage ?? 0) / 2)
-                              //             ? Colors.amber
-                              //             : Colors.grey.shade700,
-                              //         size: 16,
-                              //       ),
-                              //     ),
-                              //     const SizedBox(width: 6),
-                              //     Text(
-                              //       "From ${movie.voteCount ?? 0} users",
-                              //       style: const TextStyle(
-                              //         color: Colors.white70,
-                              //         fontSize: 12,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
                             ],
                           ),
                         ),

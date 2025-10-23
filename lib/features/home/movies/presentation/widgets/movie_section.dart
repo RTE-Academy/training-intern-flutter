@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/movie.dart';
@@ -8,8 +7,14 @@ class MovieSection extends StatelessWidget {
   final String title;
   final List<Movie> movies;
   final VoidCallback? onSeeMoreTap;
+  final void Function(Movie movie)? onMovieTap;
 
-  const MovieSection({super.key, required this.title, required this.movies, this.onSeeMoreTap,});
+  const MovieSection({
+    required this.title,
+    required this.movies,
+    this.onSeeMoreTap,
+    this.onMovieTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,7 @@ class MovieSection extends StatelessWidget {
               GestureDetector(
                 onTap: onSeeMoreTap,
                 child: const Text(
-                  'See more',
+                  'See all',
                   style: TextStyle(
                     color: Colors.blueAccent,
                     fontSize: 14,
@@ -49,9 +54,17 @@ class MovieSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: movies.length,
             itemBuilder: (context, index) {
+              final movie = movies[index];
               return SizedBox(
                 width: 140,
-                child: MovieCard(movie: movies[index]),
+                child: MovieCard(
+                  movie: movie,
+                  onTap: () {
+                    if (onMovieTap != null) {
+                      onMovieTap!(movie);
+                    }
+                  },
+                ),
               );
             },
           ),

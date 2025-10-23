@@ -6,7 +6,6 @@ import 'package:clean_architecture_tdd_course/features/number_trivia/data/models
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:matcher/matcher.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 

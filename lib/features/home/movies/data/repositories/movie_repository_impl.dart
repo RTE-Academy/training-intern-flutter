@@ -21,7 +21,8 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getPopularMovies({required int page}) async {
+  Future<Either<Failure, List<Movie>>> getPopularMovies(
+      {required int page}) async {
     try {
       final movies = await remoteDataSource.getPopularMovies(page: page);
       return Right(movies);
@@ -31,7 +32,8 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getTopRatedMovies({required int page}) async {
+  Future<Either<Failure, List<Movie>>> getTopRatedMovies(
+      {required int page}) async {
     try {
       final movies = await remoteDataSource.getTopRatedMovies(page: page);
       return Right(movies);
@@ -41,7 +43,8 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getUpcomingMovies({required int page}) async {
+  Future<Either<Failure, List<Movie>>> getUpcomingMovies(
+      {required int page}) async {
     try {
       final movies = await remoteDataSource.getUpcomingMovies(page: page);
       return Right(movies);

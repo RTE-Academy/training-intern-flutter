@@ -4,11 +4,13 @@ description: TDD Clean Architecture for Flutter
 version: 1.0.0+1
 
 environment:
-  sdk: '3.5.3'
+  sdk: ">=3.5.3"
 
 dependencies:
   flutter:
     sdk: flutter
+  url_launcher: ^6.3.0
+  intl: ^0.18.1
 
   # Service locator
   get_it: ^7.6.7
@@ -31,6 +33,8 @@ dependencies:
   internet_connection_checker: ^3.0.1
   dio: ^5.9.0
 
+  youtube_player_iframe: ^5.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,7 +45,8 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the Material Icons class.
-  uses-material-design: true
   generate: true
+  uses-material-design: true
+
   assets:
     - assets/images/

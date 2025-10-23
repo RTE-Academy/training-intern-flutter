@@ -1,9 +1,9 @@
+import 'package:clean_architecture_tdd_course/core/models/movie_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../../core/dio/dio_base.dart';
 import '../../../../../core/dio/dio_path.dart';
 import '../../../../../core/error/exceptions.dart';
-import '../models/movie_model.dart';
 
 abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getNowPlayingMovies();
@@ -13,13 +13,12 @@ abstract class MovieRemoteDataSource {
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
-
   static const String _bearerToken =
       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYzYxMjE1YzdiZDEwZWY4YzUxOWQ0OGYxZjAzM2QwZCIsIm5iZiI6MTc0Nzc5OTkxMi44MDA5OTk5LCJzdWIiOiI2ODJkNGY2OGJkZDA3MTYzZGQyZjdjOWQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.-_VBCStmWn0jf4lJBDJRhCed-UmukU1z9eEQOw-2FZE';
   Map<String, dynamic> get _headers => {
-    'accept': 'application/json',
-    'Authorization': _bearerToken,
-  };
+        'accept': 'application/json',
+        'Authorization': _bearerToken,
+      };
 
   @override
   Future<List<MovieModel>> getNowPlayingMovies() async {

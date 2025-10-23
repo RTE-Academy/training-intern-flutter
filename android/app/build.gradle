@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.resocoder.clean_architecture_tdd_course"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -21,7 +21,7 @@ android {
     defaultConfig {
         applicationId = "com.resocoder.clean_architecture_tdd_course"
         minSdkVersion 28
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 20
         versionName "0.1.6"
         multiDexEnabled true

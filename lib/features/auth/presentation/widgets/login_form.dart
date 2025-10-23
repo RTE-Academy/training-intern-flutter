@@ -21,7 +21,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  bool _obscurePassword = true; // trạng thái hiển thị/ẩn mật khẩu
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,9 @@ class _LoginFormState extends State<LoginForm> {
                 borderSide: BorderSide(color: Colors.amber),
               ),
             ),
-            validator: (value) =>
-            value == null || value.isEmpty ? 'Vui lòng nhập tên đăng nhập' : null,
+            validator: (value) => value == null || value.isEmpty
+                ? 'Vui lòng nhập tên đăng nhập'
+                : null,
           ),
           const SizedBox(height: 24),
 
@@ -70,13 +71,14 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _obscurePassword = !_obscurePassword; // đổi trạng thái
+                    _obscurePassword = !_obscurePassword;
                   });
                 },
               ),
             ),
-            validator: (value) =>
-            value == null || value.isEmpty ? 'Vui lòng nhập mật khẩu' : null,
+            validator: (value) => value == null || value.isEmpty
+                ? 'Vui lòng nhập mật khẩu'
+                : null,
           ),
 
           // Forgot Password
@@ -115,21 +117,21 @@ class _LoginFormState extends State<LoginForm> {
                   alignment: Alignment.center,
                   child: widget.isLoading
                       ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
                       : const Text(
-                    'Đăng nhập',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                          'Đăng nhập',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
             ),
