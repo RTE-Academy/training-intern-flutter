@@ -1,5 +1,10 @@
 import 'package:clean_architecture_tdd_course/features/auth/domain/usecases/login_usecase.dart';
 import 'package:clean_architecture_tdd_course/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:clean_architecture_tdd_course/features/search/data/datasources/search_remote_datasource.dart';
+import 'package:clean_architecture_tdd_course/features/search/data/repositories/search_repository_impl.dart';
+import 'package:clean_architecture_tdd_course/features/search/domain/repositories/search_repository.dart';
+import 'package:clean_architecture_tdd_course/features/search/domain/usecases/search_usecase.dart';
+import 'package:clean_architecture_tdd_course/features/search/presentation/bloc/search_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -72,6 +77,9 @@ Future<void> init() async {
       getMovieVideos: sl())
   );
 
+  //Bloc_Search
+  sl.registerFactory(() => SearchBloc(searchUseCase: sl(),));
+
   // Use cases
   sl.registerLazySingleton(() => GetConcreteNumberTrivia(sl()));
   sl.registerLazySingleton(() => GetRandomNumberTrivia(sl()));
@@ -89,6 +97,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMovieDetailUsecase(sl()));
   sl.registerLazySingleton(() => GetMovieCreditsUsecase(sl()));
   sl.registerLazySingleton(() => GetMovieVideoUsecase(sl()));
+
+  // Use cases_Search
+  sl.registerLazySingleton(() => SearchUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<NumberTriviaRepository>(
@@ -127,6 +138,13 @@ Future<void> init() async {
     ),
   );
 
+  // Repository_Search
+  sl.registerLazySingleton<SearchRepository>(
+        () => SearchRepositoryImpl(
+      remoteDataSource: sl(),
+    ),
+  );
+
   // Data sources
   sl.registerLazySingleton<NumberTriviaRemoteDataSource>(
     () => NumberTriviaRemoteDataSourceImpl(client: sl()),
@@ -146,6 +164,11 @@ Future<void> init() async {
   // Data sources_Detail
   sl.registerLazySingleton<MovieDetailRemoteDataSource>(
         () => MovieDetailRemoteDatasourceImpl(),
+  );
+
+  //Data sources_Search
+  sl.registerLazySingleton<SearchRemoteDatasource>(
+        () => SearchRemoteDataSourceImpl(),
   );
 
   //! Core

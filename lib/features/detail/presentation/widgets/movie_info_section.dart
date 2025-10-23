@@ -1,9 +1,9 @@
+import 'package:clean_architecture_tdd_course/features/home/movies/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
-import '../../domain/entities/movie_detail.dart';
 import '../../../../core/util/format_date.dart';
 
 class MovieInfoSection extends StatelessWidget {
-  final MovieDetail movieDetail;
+  final Movie movieDetail;
 
   const MovieInfoSection({
     Key? key,

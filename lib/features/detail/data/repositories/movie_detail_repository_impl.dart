@@ -1,7 +1,7 @@
 import 'package:clean_architecture_tdd_course/core/error/failures.dart';
+import 'package:clean_architecture_tdd_course/features/home/movies/domain/entities/movie.dart';
 import 'package:dartz/dartz.dart';
 import '../../domain/entities/cast.dart';
-import '../../domain/entities/movie_detail.dart';
 import '../../domain/repositories/movie_detail_repository.dart';
 import '../datasources/movie_detail_remote_datasource.dart';
 
@@ -11,7 +11,7 @@ class MovieDetailRepositoryImpl implements MovieDetailRepository {
   MovieDetailRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, MovieDetail>> getMovieDetail(int movieId) async {
+  Future<Either<Failure, Movie>> getMovieDetail(int movieId) async {
     try {
       final detail = await remoteDataSource.getMovieDetail(movieId);
       return Right(detail);

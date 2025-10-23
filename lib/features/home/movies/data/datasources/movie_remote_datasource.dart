@@ -1,9 +1,9 @@
+import 'package:clean_architecture_tdd_course/core/models/movie_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../../core/dio/dio_base.dart';
 import '../../../../../core/dio/dio_path.dart';
 import '../../../../../core/error/exceptions.dart';
-import '../models/movie_model.dart';
 
 abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getNowPlayingMovies();

@@ -1,18 +1,16 @@
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_nowplaying_movies_usecase.dart';
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_popular_movies_usecase.dart';
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_toprated_movies_usecase.dart';
-import 'package:clean_architecture_tdd_course/features/home/movies/domain/usecases/get_upcoming_movies_usecase.dart';
 import 'package:clean_architecture_tdd_course/features/home/movies/presentation/pages/popular_see_more_page.dart';
 import 'package:clean_architecture_tdd_course/features/home/movies/presentation/pages/toprated_see_more_page.dart';
 import 'package:clean_architecture_tdd_course/features/home/movies/presentation/pages/upcoming_see_more_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../injection_container.dart';
+import '../../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../../detail/presentation/pages/movie_detail_page.dart';
 import '../../domain/entities/movie.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
+import '../widgets/home_drawer.dart';
 import '../widgets/movie_error.dart';
 import '../widgets/home_header.dart';
 import '../widgets/featured_movie.dart';
@@ -24,8 +22,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<MovieBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => sl<AuthBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<MovieBloc>(),
+        ),
+      ],
       child: HomeView(username: username),
     );
   }
@@ -35,14 +40,12 @@ class HomeView extends StatelessWidget {
   final String username;
   const HomeView({Key? key, required this.username}) : super(key: key);
 
-  void _retryLoadMovies(BuildContext context) {
-    context.read<MovieBloc>().add(const LoadAllMoviesEvent());
-  }
-
   @override
   Widget build(BuildContext context) {
+    MovieBloc movieBloc = context.read<MovieBloc>();
     return Scaffold(
       backgroundColor: Colors.black,
+      drawer: HomeDrawer(username: username),
       body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is MovieLoading) {
@@ -54,9 +57,12 @@ class HomeView extends StatelessWidget {
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: HomeHeader(
-                      userName: username,
-                      avatarUrl: 'https://i.pravatar.cc/150?img=5',
+                    child: Builder(
+                      builder: (innerContext) => HomeHeader(
+                        userName: username,
+                        avatarUrl: 'https://i.pravatar.cc/150?img=5',
+                        onMenuTap: () => Scaffold.of(innerContext).openDrawer(),
+                      ),
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -87,7 +93,7 @@ class HomeView extends StatelessWidget {
           } else if (state is MovieFailure) {
             return MovieError(
               message: state.message,
-              onRetry: () => _retryLoadMovies(context),
+              onRetry: () => movieBloc.add(const LoadAllMoviesEvent()),
             );
           }
 
