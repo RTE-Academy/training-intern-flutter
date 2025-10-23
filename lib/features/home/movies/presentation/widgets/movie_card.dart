@@ -14,9 +14,8 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? imageUrl = movie.posterPath.isNotEmpty
-        ? "$img_url_w500${movie.posterPath}"
-        : null;
+    final String? imageUrl =
+        movie.posterPath.isNotEmpty ? "$img_url_w500${movie.posterPath}" : null;
 
     return InkWell(
       onTap: onTap,
@@ -25,6 +24,7 @@ class MovieCard extends StatelessWidget {
         width: 120,
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
@@ -57,17 +57,15 @@ class MovieCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            Flexible(
-              child: Text(
-                movie.title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              movie.title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

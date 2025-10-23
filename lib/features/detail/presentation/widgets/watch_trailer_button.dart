@@ -6,26 +6,49 @@ import '../bloc/movie_detail_event.dart';
 import '../bloc/movie_detail_state.dart';
 import 'youtube_trailer_player.dart';
 
-class WatchTrailerButton extends StatelessWidget {
+class WatchTrailerButton extends StatefulWidget {
   final int movieId;
   const WatchTrailerButton({super.key, required this.movieId});
 
+  @override
+  State<WatchTrailerButton> createState() => _WatchTrailerButtonState();
+}
+
+class _WatchTrailerButtonState extends State<WatchTrailerButton> {
+  YoutubePlayerController? _controller;
+
+  @override
+  void dispose() {
+    // Giải phóng controller khi widget bị hủy để tránh leak bộ nhớ
+    _controller?.close();
+    super.dispose();
+  }
+
   void showTrailerDialog(BuildContext context, String trailerKey) {
-    final controller = YoutubePlayerController.fromVideoId(
-      videoId: trailerKey,
-      autoPlay: true,
-      params: const YoutubePlayerParams(
-        showFullscreenButton: true,
-        showControls: true,
-        mute: false,
-      ),
-    );
+    // Nếu controller chưa có hoặc video khác, tạo mới
+    if (_controller == null) {
+      _controller = YoutubePlayerController.fromVideoId(
+        videoId: trailerKey,
+        autoPlay: true,
+        params: const YoutubePlayerParams(
+          showFullscreenButton: true,
+          showControls: true,
+          mute: false,
+        ),
+      );
+    } else {
+      // Nếu controller có sẵn, resume video
+      _controller!.playVideo();
+    }
 
     showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (_) => TrailerDialog(controller: controller),
-    );
+      builder: (_) => TrailerDialog(controller: _controller!),
+    ).then((_) {
+      // Khi dialog đóng, tạm dừng video thay vì destroy
+      _controller?.pauseVideo();
+    });
   }
 
   @override
@@ -52,7 +75,7 @@ class WatchTrailerButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: ElevatedButton.icon(
-            onPressed: () => bloc.add(WatchMovie(movieId)),
+            onPressed: () => bloc.add(WatchMovie(widget.movieId)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,

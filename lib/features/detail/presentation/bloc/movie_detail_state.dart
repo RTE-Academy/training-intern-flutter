@@ -1,6 +1,6 @@
+import 'package:clean_architecture_tdd_course/features/home/movies/domain/entities/movie.dart';
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/cast.dart';
-import '../../domain/entities/movie_detail.dart';
 
 abstract class MovieDetailState extends Equatable {
   const MovieDetailState();
@@ -14,30 +14,30 @@ class MovieDetailInitial extends MovieDetailState {}
 class MovieDetailLoading extends MovieDetailState {}
 
 class MovieDetailLoaded extends MovieDetailState {
-  final MovieDetail movieDetail;
+  final Movie movie;
   final List<Cast> cast;
   final String? trailerKey;
 
   const MovieDetailLoaded({
-    required this.movieDetail,
+    required this.movie,
     this.cast = const [],
     this.trailerKey,
   });
 
   MovieDetailLoaded copyWith({
-    MovieDetail? movieDetail,
+    Movie? movie,
     List<Cast>? cast,
     String? trailerKey,
   }) {
     return MovieDetailLoaded(
-      movieDetail: movieDetail ?? this.movieDetail,
+      movie: movie ?? this.movie,
       cast: cast ?? this.cast,
       trailerKey: trailerKey ?? this.trailerKey,
     );
   }
 
   @override
-  List<Object?> get props => [movieDetail, cast, trailerKey];
+  List<Object?> get props => [movie, cast, trailerKey];
 }
 
 class MovieDetailError extends MovieDetailState {
