@@ -21,9 +21,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getPopularMovies({required int page}) async {
+  Future<Either<Failure, List<Movie>>> getPopularMovies(
+      {required int page}) async {
     try {
-      final movies = await remoteDataSource.getPopularMovies(page: page);
+      final movies = await remoteDataSource.getPopularMovies(page);
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch popular movies: $e");
@@ -31,9 +32,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getTopRatedMovies({required int page}) async {
+  Future<Either<Failure, List<Movie>>> getTopRatedMovies(
+      {required int page}) async {
     try {
-      final movies = await remoteDataSource.getTopRatedMovies(page: page);
+      final movies = await remoteDataSource.getTopRatedMovies(page);
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch top rated movies: $e");
@@ -41,9 +43,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getUpcomingMovies({required int page}) async {
+  Future<Either<Failure, List<Movie>>> getUpcomingMovies(
+      {required int page}) async {
     try {
-      final movies = await remoteDataSource.getUpcomingMovies(page: page);
+      final movies = await remoteDataSource.getUpcomingMovies(page);
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch upcoming movies: $e");

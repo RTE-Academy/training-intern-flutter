@@ -12,6 +12,13 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
+class AuthLoggedOut extends AuthState {
+  const AuthLoggedOut();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class AuthSuccess extends AuthState {
   final User user;
 
