@@ -55,20 +55,20 @@ class MovieDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              MoviePosterSection(posterPath: state.movieDetail.posterPath),
+              MoviePosterSection(posterPath: state.movie.posterPath),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    MovieInfoSection(movieDetail: state.movieDetail),
+                    MovieInfoSection(movie: state.movie),
                     const SizedBox(height: 20),
-                    MovieOverviewWidget(overview: state.movieDetail.overview),
+                    MovieOverviewWidget(overview: state.movie.overview),
                     const SizedBox(height: 24),
                     if (state.cast.isNotEmpty)
                       CastListWidget(cast: state.cast),
                     const SizedBox(height: 30),
-                    WatchTrailerButton(movieId: state.movieDetail.id),
+                    WatchTrailerButton(movieId: state.movie.id),
                   ],
                 ),
               ),

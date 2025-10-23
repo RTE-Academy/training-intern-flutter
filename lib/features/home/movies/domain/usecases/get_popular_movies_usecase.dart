@@ -9,6 +9,6 @@ class GetPopularMoviesUsecase {
   GetPopularMoviesUsecase(this.repository);
 
   Future<Either<Failure, List<Movie>>> call(int page) async {
-    return await repository.getPopularMovies(page: page);
+    return await repository.getPopularMovies(page);
   }
 }
