@@ -13,7 +13,8 @@ class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<Either<Failure, List<Movie>>> getNowPlayingMovies() async {
     try {
-      final movies = await remoteDataSource.getNowPlayingMovies();
+      final movieModel = await remoteDataSource.getNowPlayingMovies();
+      final movies = movieModel.map((m) => m.toEntity()).toList();
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch now playing movies: $e");
@@ -21,10 +22,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getPopularMovies(
-      {required int page}) async {
+  Future<Either<Failure, List<Movie>>> getPopularMovies(int page) async {
     try {
-      final movies = await remoteDataSource.getPopularMovies(page: page);
+      final movieModel = await remoteDataSource.getPopularMovies(page);
+      final movies = movieModel.map((m) => m.toEntity()).toList();
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch popular movies: $e");
@@ -32,10 +33,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getTopRatedMovies(
-      {required int page}) async {
+  Future<Either<Failure, List<Movie>>> getTopRatedMovies(int page) async {
     try {
-      final movies = await remoteDataSource.getTopRatedMovies(page: page);
+      final movieModel = await remoteDataSource.getTopRatedMovies(page);
+      final movies = movieModel.map((m) => m.toEntity()).toList();
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch top rated movies: $e");
@@ -43,10 +44,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getUpcomingMovies(
-      {required int page}) async {
+  Future<Either<Failure, List<Movie>>> getUpcomingMovies(int page) async {
     try {
-      final movies = await remoteDataSource.getUpcomingMovies(page: page);
+      final movieModel = await remoteDataSource.getUpcomingMovies(page);
+      final movies = movieModel.map((m) => m.toEntity()).toList();
       return Right(movies);
     } catch (e) {
       throw Exception("Failed to fetch upcoming movies: $e");

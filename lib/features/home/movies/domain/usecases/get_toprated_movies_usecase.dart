@@ -9,6 +9,6 @@ class GetTopRatedMoviesUsecase {
   GetTopRatedMoviesUsecase(this.repository);
 
   Future<Either<Failure, List<Movie>>> call(int page) async {
-    return await repository.getTopRatedMovies(page: page);
+    return await repository.getTopRatedMovies(page);
   }
 }

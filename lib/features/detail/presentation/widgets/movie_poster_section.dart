@@ -11,7 +11,7 @@ class MoviePosterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = posterPath != null
+    final imageUrl = posterPath!.isNotEmpty
         ? '$img_url_original$posterPath'
         : null;
 

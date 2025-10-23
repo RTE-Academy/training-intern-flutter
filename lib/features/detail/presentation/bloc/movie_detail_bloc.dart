@@ -28,8 +28,8 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
     final result = await getMovieDetail(event.movieId);
     result.fold(
       (failure) => emit(const MovieDetailError("Failed to load movie details")),
-      (movieDetail) {
-        emit(MovieDetailLoaded(movieDetail: movieDetail));
+      (movie) {
+        emit(MovieDetailLoaded(movie: movie));
         add(LoadMovieCredits(event.movieId));
       },
     );

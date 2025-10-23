@@ -9,6 +9,6 @@ class GetUpcomingMoviesUsecase {
   GetUpcomingMoviesUsecase(this.repository);
 
   Future<Either<Failure, List<Movie>>> call(int page) async {
-    return await repository.getUpcomingMovies(page: page);
+    return await repository.getUpcomingMovies(page);
   }
 }

@@ -1,12 +1,12 @@
+import 'package:clean_architecture_tdd_course/core/models/movie_model.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/dio/dio_base.dart';
 import '../../../../core/dio/dio_path.dart';
 import '../../../../core/error/exceptions.dart';
 import '../model/cast_model.dart';
-import '../model/movie_detail_model.dart';
 
 abstract class MovieDetailRemoteDataSource {
-  Future<MovieDetailModel> getMovieDetail(int movieId);
+  Future<MovieModel> getMovieDetail(int movieId);
   Future<List<CastModel>> getMovieCredits(int movieId);
   Future<String?> getMovieTrailer(int movieId);
 }
@@ -20,7 +20,7 @@ class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
       };
 
   @override
-  Future<MovieDetailModel> getMovieDetail(int movieId) async {
+  Future<MovieModel> getMovieDetail(int movieId) async {
     try {
       final response = await dio.get(
         '$movie/$movieId',
@@ -34,7 +34,7 @@ class MovieDetailRemoteDatasourceImpl implements MovieDetailRemoteDataSource {
 
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
-        return MovieDetailModel.fromJson({...data, 'trailerKey': trailerKey});
+        return MovieModel.fromJson({...data, 'trailerKey': trailerKey});
       } else {
         throw ServerException();
       }
