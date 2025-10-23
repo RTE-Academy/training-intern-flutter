@@ -7,9 +7,9 @@ import '../../../../../core/error/exceptions.dart';
 
 abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getNowPlayingMovies();
-  Future<List<MovieModel>> getPopularMovies({required int page});
-  Future<List<MovieModel>> getTopRatedMovies({required int page});
-  Future<List<MovieModel>> getUpcomingMovies({required int page});
+  Future<List<MovieModel>> getPopularMovies(int page);
+  Future<List<MovieModel>> getTopRatedMovies(int page);
+  Future<List<MovieModel>> getUpcomingMovies(int page);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -42,7 +42,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getPopularMovies({int page = 1}) async {
+  Future<List<MovieModel>> getPopularMovies(int page) async {
     try {
       final response = await dio.get(
         '$movie/popular',
@@ -63,7 +63,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getTopRatedMovies({int page = 1}) async {
+  Future<List<MovieModel>> getTopRatedMovies(int page) async {
     try {
       final response = await dio.get(
         '$movie/top_rated',
@@ -84,7 +84,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getUpcomingMovies({int page = 1}) async {
+  Future<List<MovieModel>> getUpcomingMovies(int page) async {
     try {
       final response = await dio.get(
         '$movie/upcoming',
